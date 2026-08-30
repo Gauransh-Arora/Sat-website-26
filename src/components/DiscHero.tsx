@@ -13,10 +13,10 @@ import {
   ArrowRight,
 } from "lucide-react";
 
-import frame1 from "./assets/frame1.jpeg";
-import frame2 from "./assets/frame2.jpeg";
-import frame3 from "./assets/frame3.jpeg";
-import frame4 from "./assets/frame4.jpeg";
+import frame1 from "../assets/frame1.jpeg";
+import frame2 from "../assets/frame2.jpeg";
+import frame3 from "../assets/frame3.jpeg";
+import frame4 from "../assets/frame4.jpeg";
 
 import "./DiscHero.css";
 

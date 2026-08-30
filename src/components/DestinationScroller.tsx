@@ -3,11 +3,11 @@ import gsap from "gsap";
 import { Observer } from "gsap/Observer";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-import frame1 from "./assets/frame1.jpeg";
-import frame2 from "./assets/frame2.jpeg";
-import frame3 from "./assets/frame3.jpeg";
-import frame4 from "./assets/frame4.jpeg";
-import logo from "./assets/logo.png";
+import frame1 from "../assets/frame1.jpeg";
+import frame2 from "../assets/frame2.jpeg";
+import frame3 from "../assets/frame3.jpeg";
+import frame4 from "../assets/frame4.jpeg";
+import logo from "../assets/logo.png";
 
 import "./DestinationScroller.css";
 
@@ -144,7 +144,9 @@ export default function DestinationScroller() {
       gsap.set(bg.current, {
         opacity: 1,
         rotation: 0,
-        scale: 1.35,
+        scale: 1,
+        xPercent: -50,
+        yPercent: -50,
         transformOrigin: "50% 50%",
         force3D: true,
       });
@@ -153,7 +155,9 @@ export default function DestinationScroller() {
         gsap.set(el, {
           opacity: 0,
           rotation: 0,
-          scale: 1.35,
+          scale: 1,
+          xPercent: -50,
+          yPercent: -50,
           transformOrigin: "50% 50%",
           force3D: true,
         });

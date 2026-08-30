@@ -1,16 +1,22 @@
 
-import DestinationScroller from './DestinationScroller.tsx'
-import DestinationScroller2 from './DestinationScroller2.tsx'
-import DestinationHero from './Hero.tsx'
-import DiscHero from './DiscHero.tsx'
+import DestinationScroller from './components/DestinationScroller.tsx'
+import DestinationScroller2 from './components/DestinationScroller2.tsx'
+import DestinationHero from './components/Hero.tsx'
+import DiscHero from './components/DiscHero.tsx'
+import Navbar from './components/Navbar.tsx'
+import VideoLoader from './components/VideoLoader.tsx'
 
 function App() {
 
   return (
-    <DestinationScroller/>
-    // <DestinationScroller2/>
-    // <DestinationHero/>
-    // <DiscHero/>
+    <>
+      <VideoLoader />
+      <Navbar />
+      <DestinationScroller/>
+      {/* <DestinationScroller2/> */}
+      {/* <DestinationHero/> */}
+      {/* <DiscHero/> */}
+    </>
     
   )
 }
