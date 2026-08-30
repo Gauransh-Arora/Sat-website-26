@@ -1,0 +1,476 @@
+/* =========================================================
+   DESTINATION SECTION
+========================================================= */
+
+.destination-section {
+  position: relative;
+
+  width: 100%;
+  height: 100vh;
+  min-height: 650px;
+
+  overflow: hidden;
+
+  background: #111;
+
+  isolation: isolate;
+}
+
+
+/* =========================================================
+   BACKGROUND
+========================================================= */
+
+.destination-background {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+
+  z-index: -5;
+
+  background: #111;
+}
+
+.destination-background img {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  object-position: center;
+
+  /*
+   * Overscan.
+   */
+  transform:
+    translate3d(0, 0, 0) scale(1.2);
+
+  transform-origin: 50% 50%;
+
+  backface-visibility: hidden;
+
+  -webkit-backface-visibility: hidden;
+
+  will-change:
+    opacity,
+    transform;
+
+  pointer-events: none;
+
+  user-select: none;
+}
+
+
+/* =========================================================
+   BACKGROUND LAYERS
+========================================================= */
+
+.background-current {
+  z-index: 1;
+
+  opacity: 1;
+}
+
+.background-next {
+  z-index: 2;
+
+  opacity: 0;
+}
+
+.background-third {
+  z-index: 3;
+
+  opacity: 0;
+}
+
+.background-fourth {
+  z-index: 4;
+
+  opacity: 0;
+}
+
+
+/* =========================================================
+   VINYL CONTAINER
+========================================================= */
+
+.vinyl-container {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  width: min(100vw, 1050px);
+
+  aspect-ratio: 1 / 1;
+
+  /*
+   * The container never rotates.
+   */
+  transform:
+    translate3d(-50%, -50%, 0);
+
+  transform-origin: 50% 50%;
+
+  transform-style: preserve-3d;
+
+  z-index: 5;
+
+  pointer-events: none;
+
+  backface-visibility: hidden;
+
+  -webkit-backface-visibility: hidden;
+}
+
+
+/* =========================================================
+   VINYL LOGO
+========================================================= */
+
+.vinyl-logo {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate3d(-50%, -50%, 0);
+
+  width: 100%;
+  /* max-width: 400px; */
+
+  z-index: 20;
+
+  pointer-events: none;
+
+  user-select: none;
+}
+
+
+/* =========================================================
+   VINYL FRAME
+========================================================= */
+
+.vinyl-frame {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  /*
+   * GSAP controls the transform.
+   */
+  transform-origin: 50% 50%;
+
+  transform-style: preserve-3d;
+
+  backface-visibility: hidden;
+
+  -webkit-backface-visibility: hidden;
+
+  border-radius: 50%;
+
+  overflow: hidden;
+
+  clip-path:
+    circle(50% at 50% 50%);
+
+  -webkit-clip-path:
+    circle(50% at 50% 50%);
+
+  box-sizing: border-box;
+
+  will-change: transform;
+
+  contain: paint;
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   VINYL IMAGE
+========================================================= */
+
+.vinyl-image {
+  position: absolute;
+
+  display: block;
+
+  max-width: none;
+
+  object-fit: cover;
+
+  object-position: center;
+
+  pointer-events: none;
+
+  user-select: none;
+
+  border-radius: 50%;
+
+  clip-path:
+    circle(50% at 50% 50%);
+
+  -webkit-clip-path:
+    circle(50% at 50% 50%);
+
+  /*
+   * The image itself does NOT have its own rotation.
+   *
+   * The frame containing it rotates.
+   */
+  transform:
+    translate3d(0, 0, 0);
+
+  transform-origin: 50% 50%;
+
+  backface-visibility: hidden;
+
+  -webkit-backface-visibility: hidden;
+
+  will-change: opacity;
+}
+
+
+/* =========================================================
+   IMAGE LAYERS
+========================================================= */
+
+.current-image {
+  z-index: 4;
+
+  opacity: 1;
+}
+
+.next-image {
+  z-index: 3;
+
+  opacity: 0;
+}
+
+.third-image {
+  z-index: 2;
+
+  opacity: 0;
+}
+
+.fourth-image {
+  z-index: 1;
+
+  opacity: 0;
+}
+
+
+/* =========================================================
+   OUTER FRAME
+========================================================= */
+
+.frame-outer {
+  width: 125%;
+  height: 125%;
+}
+
+
+/* =========================================================
+   OUTER FRAME IMAGE
+========================================================= */
+
+.frame-outer .vinyl-image {
+  width: 80%;
+  height: 80%;
+
+  left: 10%;
+  top: 10%;
+}
+
+
+/* =========================================================
+   OUTER FRAME SOFT-LIGHT OVERLAY
+========================================================= */
+
+/*
+ * ONLY the outer circular image gets this overlay.
+ *
+ * #050f20
+ * 46% opacity
+ * soft-light
+ */
+
+.frame-outer::before {
+  content: "";
+
+  position: absolute;
+
+  left: 10%;
+  top: 10%;
+
+  width: 80%;
+  height: 80%;
+
+  background: #050f20;
+
+  opacity: 0.46;
+
+  mix-blend-mode: soft-light;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  z-index: 10;
+}
+
+
+/* =========================================================
+   OUTER FRAME WHITE BOUNDARY
+========================================================= */
+
+/*
+ * The outer frame is 125%.
+ *
+ * The actual visible image is 80% of that frame.
+ *
+ * Therefore the white boundary follows the 80% image.
+ */
+
+.frame-outer::after {
+  content: "";
+
+  position: absolute;
+
+  left: 10%;
+  top: 10%;
+
+  width: 80%;
+  height: 80%;
+
+  border: 2px solid #fff;
+
+  border-radius: 50%;
+
+  box-sizing: border-box;
+
+  pointer-events: none;
+
+  z-index: 11;
+}
+
+
+/* =========================================================
+   INNER FRAME
+========================================================= */
+
+.frame-inner {
+  width: 60%;
+  height: 60%;
+
+  border: 2px solid #fff;
+}
+
+
+/* =========================================================
+   INNER FRAME IMAGE
+========================================================= */
+
+.frame-inner .vinyl-image {
+  width: 166.67%;
+  height: 166.67%;
+
+  left: -33.33%;
+  top: -33.33%;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+
+/* ---------------------------------------------------------
+   LARGE DESKTOP
+--------------------------------------------------------- */
+
+@media (min-width: 1200px) {
+
+  .vinyl-container {
+    width: min(100vw, 1100px);
+  }
+
+}
+
+
+/* ---------------------------------------------------------
+   TABLET
+--------------------------------------------------------- */
+
+@media (max-width: 900px) {
+
+  .destination-section {
+    min-height: 600px;
+  }
+
+  .vinyl-container {
+    width: 110vw;
+
+    max-width: none;
+  }
+
+}
+
+
+/* ---------------------------------------------------------
+   MOBILE
+--------------------------------------------------------- */
+
+@media (max-width: 700px) {
+
+  .destination-section {
+    min-height: 600px;
+  }
+
+  .vinyl-container {
+    width: 135vw;
+
+    max-width: none;
+  }
+
+}
+
+
+/* ---------------------------------------------------------
+   SMALL MOBILE
+--------------------------------------------------------- */
+
+@media (max-width: 420px) {
+
+  .vinyl-container {
+    width: 155vw;
+  }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .vinyl-frame,
+  .destination-background img {
+    will-change: auto;
+  }
+
+}
