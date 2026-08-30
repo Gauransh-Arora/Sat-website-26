@@ -12,835 +12,426 @@ import "./DestinationScroller.css";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const destinations = [
-  frame1,
-  frame2,
-  frame3,
-  frame4,
-];
+const destinations = [frame1, frame2, frame3, frame4];
+
 
 export default function DestinationScroller() {
-  const sectionRef = useRef(null);
+  const sectionRef = useRef<HTMLElement>(null);
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
-
     if (!section) return;
 
     const ctx = gsap.context(() => {
+
+
       /* =====================================================
          ELEMENTS
       ===================================================== */
 
-      const inner = section.querySelector(".frame-inner");
-      const outer = section.querySelector(".frame-outer");
+      const inner = section.querySelector<HTMLElement>(
+        ".frame-inner",
+      )!;
 
-      /*
-       * Keep image collections separate for each frame.
-       *
-       * This is important because the transition does NOT
-       * reveal the next image in both circles at the same
-       * time.
-       */
-
-      const innerCurrent =
-        inner.querySelector(".current-image");
-
-      const innerNext =
-        inner.querySelector(".next-image");
-
-      const innerThird =
-        inner.querySelector(".third-image");
-
-      const innerFourth =
-        inner.querySelector(".fourth-image");
-
-
-      const outerCurrent =
-        outer.querySelector(".current-image");
-
-      const outerNext =
-        outer.querySelector(".next-image");
-
-      const outerThird =
-        outer.querySelector(".third-image");
-
-      const outerFourth =
-        outer.querySelector(".fourth-image");
+      const outer = section.querySelector<HTMLElement>(
+        ".frame-outer",
+      )!;
 
 
       /* =====================================================
-         BACKGROUND
+         PER-FRAME IMAGE ELEMENTS
+
+         Kept separate because the inner circle reveals
+         the next image before the outer circle does.
       ===================================================== */
 
-      const currentBackground =
-        section.querySelector(".background-current");
+      const innerImg = {
+        current: inner.querySelector(".current-image")!,
+        next:    inner.querySelector(".next-image")!,
+        third:   inner.querySelector(".third-image")!,
+        fourth:  inner.querySelector(".fourth-image")!,
+      };
 
-      const nextBackground =
-        section.querySelector(".background-next");
-
-      const thirdBackground =
-        section.querySelector(".background-third");
-
-      const fourthBackground =
-        section.querySelector(".background-fourth");
+      const outerImg = {
+        current: outer.querySelector(".current-image")!,
+        next:    outer.querySelector(".next-image")!,
+        third:   outer.querySelector(".third-image")!,
+        fourth:  outer.querySelector(".fourth-image")!,
+      };
 
 
       /* =====================================================
-         ANIMATION SETTINGS
+         BACKGROUND ELEMENTS
       ===================================================== */
 
-      const FRAME_ROTATION = 360;
+      const bg = {
+        current: section.querySelector(".background-current")!,
+        next:    section.querySelector(".background-next")!,
+        third:   section.querySelector(".background-third")!,
+        fourth:  section.querySelector(".background-fourth")!,
+      };
+
+
+      /* =====================================================
+         TIMING CONSTANTS
+      ===================================================== */
 
       /*
-       * Rotation duration.
+       * Full rotation per transition.
        */
-      const FRAME_DURATION = 2.2;
+      const ROTATION = 360;
 
       /*
-       * Outer frame starts slightly after inner frame.
+       * Duration of each frame's 360° spin.
        */
-      const FRAME_STAGGER = 0.5;
+      const SPIN_DURATION = 2.2;
 
       /*
-       * The NEXT image starts appearing inside the
-       * inner circle before the outer circle.
+       * Outer frame starts this many seconds after
+       * the inner frame.
        */
-      const INNER_REVEAL_START = 1.45;
+      const STAGGER = 0.5;
 
       /*
-       * The NEXT image then appears in the outer circle.
-       */
-      const OUTER_REVEAL_START = 1.75;
-
-      /*
-       * Duration of each circular image reveal.
-       */
-      const IMAGE_REVEAL_DURATION = 0.55;
-
-      /*
-       * Background transition.
+       * Inner image cross begins at ~66% through
+       * the inner frame's rotation.
        *
-       * Kept separate from the circular mechanism.
+       * 2.2 × 0.66 ≈ 1.45
        */
-      const BACKGROUND_FADE_START = 1.85;
-
-      const BACKGROUND_FADE_DURATION = 0.7;
+      const INNER_CROSS_START = 1.45;
 
       /*
-       * Time between destinations.
+       * Outer image cross begins at ~57% through
+       * the outer frame's rotation, measured from
+       * the outer frame's own start.
+       *
+       * 0.5 + 2.2 × 0.57 ≈ 1.75
        */
-      const HOLD_DURATION = 1.2;
+      const OUTER_CROSS_START = 1.75;
+
+      /*
+       * Duration of each fade+scale image cross.
+       */
+      const CROSS_DURATION = 0.55;
+
+      /*
+       * Background crossfade lands right as the
+       * outer ring's reveal finishes.
+       */
+      const BG_FADE_START = 1.85;
+      const BG_FADE_DURATION = 0.7;
+
+      /*
+       * Hold on the settled state before the next
+       * transition begins.
+       */
+      const HOLD = 1.2;
 
 
       /* =====================================================
          INITIAL FRAME STATE
+
+         GSAP controls xPercent/yPercent for centering
+         and rotation for the spin.
       ===================================================== */
 
-      gsap.set(inner, {
-        xPercent: -50,
-        yPercent: -50,
-
-        rotation: 0,
-
-        transformOrigin: "50% 50%",
-
-        force3D: true,
-      });
-
-      gsap.set(outer, {
-        xPercent: -50,
-        yPercent: -50,
-
-        rotation: 0,
-
-        transformOrigin: "50% 50%",
-
-        force3D: true,
+      [inner, outer].forEach((frame) => {
+        gsap.set(frame, {
+          xPercent: -50,
+          yPercent: -50,
+          rotation: 0,
+          transformOrigin: "50% 50%",
+          force3D: true,
+        });
       });
 
 
       /* =====================================================
-         INITIAL INNER IMAGE STATE
+         INITIAL IMAGE STATE
+
+         All images at opacity 1 (visible) or 0 (hidden).
+         Scale starts at 1 for visible, will be animated.
       ===================================================== */
 
-      gsap.set(innerCurrent, {
-        opacity: 1,
-      });
+      [innerImg.current, outerImg.current].forEach(
+        (el) => gsap.set(el, { opacity: 1, scale: 1 }),
+      );
 
-      gsap.set(innerNext, {
-        opacity: 0,
-      });
-
-      gsap.set(innerThird, {
-        opacity: 0,
-      });
-
-      gsap.set(innerFourth, {
-        opacity: 0,
-      });
-
-
-      /* =====================================================
-         INITIAL OUTER IMAGE STATE
-      ===================================================== */
-
-      gsap.set(outerCurrent, {
-        opacity: 1,
-      });
-
-      gsap.set(outerNext, {
-        opacity: 0,
-      });
-
-      gsap.set(outerThird, {
-        opacity: 0,
-      });
-
-      gsap.set(outerFourth, {
-        opacity: 0,
-      });
+      [
+        innerImg.next, innerImg.third, innerImg.fourth,
+        outerImg.next, outerImg.third, outerImg.fourth,
+      ].forEach(
+        (el) => gsap.set(el, { opacity: 0, scale: 1 }),
+      );
 
 
       /* =====================================================
          INITIAL BACKGROUND STATE
       ===================================================== */
 
-      gsap.set(currentBackground, {
+      gsap.set(bg.current, {
         opacity: 1,
-
         rotation: 0,
-
         scale: 1.04,
-
         transformOrigin: "50% 50%",
-
         force3D: true,
       });
 
-      gsap.set(nextBackground, {
-        opacity: 0,
-
-        rotation: 0,
-
-        scale: 1.04,
-
-        transformOrigin: "50% 50%",
-
-        force3D: true,
+      [bg.next, bg.third, bg.fourth].forEach((el) => {
+        gsap.set(el, {
+          opacity: 0,
+          rotation: 0,
+          scale: 1.04,
+          transformOrigin: "50% 50%",
+          force3D: true,
+        });
       });
 
-      gsap.set(thirdBackground, {
-        opacity: 0,
 
-        rotation: 0,
+      /* =====================================================
+         createTransition()
 
-        scale: 1.04,
+         Builds one transition timeline for any
+         (current → next) destination change.
+      ===================================================== */
 
-        transformOrigin: "50% 50%",
+      interface TransitionArgs {
+        innerOut: Element;
+        innerIn:  Element;
+        outerOut: Element;
+        outerIn:  Element;
+        bgOut:    Element;
+        bgIn:     Element;
+      }
 
-        force3D: true,
-      });
+      function createTransition({
+        innerOut,
+        innerIn,
+        outerOut,
+        outerIn,
+        bgOut,
+        bgIn,
+      }: TransitionArgs) {
 
-      gsap.set(fourthBackground, {
-        opacity: 0,
+        const tl = gsap.timeline();
 
-        rotation: 0,
 
-        scale: 1.04,
+        /* -------------------------------------------------
+           INNER FRAME ROTATION
 
-        transformOrigin: "50% 50%",
+           +360°, starts at t=0
+        ------------------------------------------------- */
 
-        force3D: true,
-      });
+        tl.to(
+          inner,
+          {
+            rotation: `+=${ROTATION}`,
+            duration: SPIN_DURATION,
+            ease: "power3.inOut",
+            force3D: true,
+          },
+          0,
+        );
+
+
+        /* -------------------------------------------------
+           OUTER FRAME ROTATION
+
+           +360°, starts at t=STAGGER
+        ------------------------------------------------- */
+
+        tl.to(
+          outer,
+          {
+            rotation: `+=${ROTATION}`,
+            duration: SPIN_DURATION,
+            ease: "power3.inOut",
+            force3D: true,
+          },
+          STAGGER,
+        );
+
+
+        /* -------------------------------------------------
+           INNER IMAGE CROSS
+
+           At ~66% through the inner frame's rotation:
+           - outgoing: opacity 1→0, scale 1→1.2
+           - incoming: opacity 0→1, scale 1.2→1
+        ------------------------------------------------- */
+
+        tl.to(
+          innerOut,
+          {
+            opacity: 0,
+            scale: 1.2,
+            duration: CROSS_DURATION,
+            ease: "power2.inOut",
+          },
+          INNER_CROSS_START,
+        );
+
+        tl.fromTo(
+          innerIn,
+          { opacity: 0, scale: 1.2 },
+          {
+            opacity: 1,
+            scale: 1,
+            duration: CROSS_DURATION,
+            ease: "power2.inOut",
+          },
+          INNER_CROSS_START,
+        );
+
+
+        /* -------------------------------------------------
+           OUTER IMAGE CROSS
+
+           A beat later, at ~57% through the outer
+           frame's own rotation:
+           - outgoing: opacity 1→0, scale 1→1.2
+           - incoming: opacity 0→1, scale 1.2→1
+        ------------------------------------------------- */
+
+        tl.to(
+          outerOut,
+          {
+            opacity: 0,
+            scale: 1.2,
+            duration: CROSS_DURATION,
+            ease: "power2.inOut",
+          },
+          OUTER_CROSS_START,
+        );
+
+        tl.fromTo(
+          outerIn,
+          { opacity: 0, scale: 1.2 },
+          {
+            opacity: 1,
+            scale: 1,
+            duration: CROSS_DURATION,
+            ease: "power2.inOut",
+          },
+          OUTER_CROSS_START,
+        );
+
+
+        /* -------------------------------------------------
+           BACKGROUND DRIFT
+
+           Slow rotate(0→8°) + scale(1.04→1.08)
+           on the outgoing background for ambient motion
+           while it's still visible.
+        ------------------------------------------------- */
+
+        tl.fromTo(
+          bgOut,
+          { rotation: 0, scale: 1.04 },
+          {
+            rotation: 8,
+            scale: 1.08,
+            duration: 2.7,
+            ease: "power2.inOut",
+            force3D: true,
+          },
+          0,
+        );
+
+
+        /* -------------------------------------------------
+           BACKGROUND CROSSFADE
+
+           Timed to land right as the outer ring's
+           reveal finishes.
+        ------------------------------------------------- */
+
+        tl.to(
+          bgOut,
+          {
+            opacity: 0,
+            duration: BG_FADE_DURATION,
+            ease: "power2.inOut",
+          },
+          BG_FADE_START,
+        );
+
+        tl.fromTo(
+          bgIn,
+          { opacity: 0, rotation: 0, scale: 1.04 },
+          {
+            opacity: 1,
+            rotation: 0,
+            scale: 1.04,
+            duration: BG_FADE_DURATION,
+            ease: "power2.inOut",
+            force3D: true,
+          },
+          BG_FADE_START,
+        );
+
+
+        return tl;
+      }
 
 
       /* =====================================================
          MASTER TIMELINE
       ===================================================== */
 
-      const master = gsap.timeline({
-        paused: true,
-      });
+      const master = gsap.timeline({ paused: true });
 
 
       /* =====================================================
-         TRANSITION 1
-
-         IMAGE 1 → IMAGE 2
+         TRANSITION 1 — IMAGE 1 → IMAGE 2
       ===================================================== */
 
-      const transition1 = gsap.timeline();
-
-
-      /* -----------------------------------------------------
-         INNER FRAME ROTATION
-      ----------------------------------------------------- */
-
-      transition1.to(
-        inner,
-        {
-          rotation: `+=${FRAME_ROTATION}`,
-
-          duration: FRAME_DURATION,
-
-          ease: "power3.inOut",
-
-          force3D: true,
-        },
-        0
+      master.add(
+        createTransition({
+          innerOut: innerImg.current,
+          innerIn:  innerImg.next,
+          outerOut: outerImg.current,
+          outerIn:  outerImg.next,
+          bgOut:    bg.current,
+          bgIn:     bg.next,
+        }),
       );
 
-
-      /* -----------------------------------------------------
-         OUTER FRAME ROTATION
-      ----------------------------------------------------- */
-
-      transition1.to(
-        outer,
-        {
-          rotation: `+=${FRAME_ROTATION}`,
-
-          duration: FRAME_DURATION,
-
-          ease: "power3.inOut",
-
-          force3D: true,
-        },
-        FRAME_STAGGER
-      );
-
-
-      /* -----------------------------------------------------
-         INNER CIRCLE REVEALS NEXT IMAGE FIRST
-      ----------------------------------------------------- */
-
-      transition1.to(
-        innerCurrent,
-        {
-          opacity: 0,
-          scale: 1.2,
-
-          duration: IMAGE_REVEAL_DURATION,
-
-          ease: "power2.inOut",
-        },
-        INNER_REVEAL_START
-      );
-
-      transition1.fromTo(
-        innerNext,
-        {
-          opacity: 0,
-          scale: 1.2,
-        },
-        {
-          opacity: 1,
-          scale: 1,
-
-          duration: IMAGE_REVEAL_DURATION,
-
-          ease: "power2.inOut",
-        },
-        INNER_REVEAL_START
-      );
-
-
-      /* -----------------------------------------------------
-         OUTER CIRCLE REVEALS NEXT IMAGE SECOND
-      ----------------------------------------------------- */
-
-      transition1.to(
-        outerCurrent,
-        {
-          opacity: 0,
-          scale: 1.2,
-
-          duration: IMAGE_REVEAL_DURATION,
-
-          ease: "power2.inOut",
-        },
-        OUTER_REVEAL_START
-      );
-
-      transition1.fromTo(
-        outerNext,
-        {
-          opacity: 0,
-          scale: 1.2,
-        },
-        {
-          opacity: 1,
-          scale: 1,
-
-          duration: IMAGE_REVEAL_DURATION,
-
-          ease: "power2.inOut",
-        },
-        OUTER_REVEAL_START
-      );
-
-
-      /* -----------------------------------------------------
-         BACKGROUND
-
-         The background changes underneath the circular
-         transition rather than being the transition itself.
-      ----------------------------------------------------- */
-
-      transition1.fromTo(
-        currentBackground,
-        {
-          rotation: 0,
-          scale: 1.04,
-        },
-        {
-          rotation: 8,
-          scale: 1.08,
-
-          duration: 2.7,
-
-          ease: "power2.inOut",
-
-          force3D: true,
-        },
-        0
-      );
-
-
-      transition1.to(
-        currentBackground,
-        {
-          opacity: 0,
-
-          duration: BACKGROUND_FADE_DURATION,
-
-          ease: "power2.inOut",
-        },
-        BACKGROUND_FADE_START
-      );
-
-      transition1.fromTo(
-        nextBackground,
-        {
-          opacity: 0,
-
-          rotation: 0,
-
-          scale: 1.04,
-        },
-        {
-          opacity: 1,
-
-          rotation: 0,
-
-          scale: 1.04,
-
-          duration: BACKGROUND_FADE_DURATION,
-
-          ease: "power2.inOut",
-
-          force3D: true,
-        },
-        BACKGROUND_FADE_START
-      );
-
-
-      master.add(transition1);
+      master.to({}, { duration: HOLD });
 
 
       /* =====================================================
-         HOLD IMAGE 2
+         TRANSITION 2 — IMAGE 2 → IMAGE 3
       ===================================================== */
 
-      master.to(
-        {},
-        {
-          duration: HOLD_DURATION,
-        }
+      master.add(
+        createTransition({
+          innerOut: innerImg.next,
+          innerIn:  innerImg.third,
+          outerOut: outerImg.next,
+          outerIn:  outerImg.third,
+          bgOut:    bg.next,
+          bgIn:     bg.third,
+        }),
       );
+
+      master.to({}, { duration: HOLD });
 
 
       /* =====================================================
-         TRANSITION 2
-
-         IMAGE 2 → IMAGE 3
+         TRANSITION 3 — IMAGE 3 → IMAGE 4
       ===================================================== */
 
-      const transition2 = gsap.timeline();
-
-
-      /* -----------------------------------------------------
-         INNER FRAME ROTATION
-      ----------------------------------------------------- */
-
-      transition2.to(
-        inner,
-        {
-          rotation: `+=${FRAME_ROTATION}`,
-
-          duration: FRAME_DURATION,
-
-          ease: "power3.inOut",
-
-          force3D: true,
-        },
-        0
+      master.add(
+        createTransition({
+          innerOut: innerImg.third,
+          innerIn:  innerImg.fourth,
+          outerOut: outerImg.third,
+          outerIn:  outerImg.fourth,
+          bgOut:    bg.third,
+          bgIn:     bg.fourth,
+        }),
       );
-
-
-      /* -----------------------------------------------------
-         OUTER FRAME ROTATION
-      ----------------------------------------------------- */
-
-      transition2.to(
-        outer,
-        {
-          rotation: `+=${FRAME_ROTATION}`,
-
-          duration: FRAME_DURATION,
-
-          ease: "power3.inOut",
-
-          force3D: true,
-        },
-        FRAME_STAGGER
-      );
-
-
-      /* -----------------------------------------------------
-         INNER CIRCLE
-
-         IMAGE 2 → IMAGE 3
-      ----------------------------------------------------- */
-
-      transition2.to(
-        innerNext,
-        {
-          opacity: 0,
-          scale: 1.2,
-
-          duration: IMAGE_REVEAL_DURATION,
-
-          ease: "power2.inOut",
-        },
-        INNER_REVEAL_START
-      );
-
-      transition2.fromTo(
-        innerThird,
-        {
-          opacity: 0,
-          scale: 1.2,
-        },
-        {
-          opacity: 1,
-          scale: 1,
-
-          duration: IMAGE_REVEAL_DURATION,
-
-          ease: "power2.inOut",
-        },
-        INNER_REVEAL_START
-      );
-
-
-      /* -----------------------------------------------------
-         OUTER CIRCLE
-
-         IMAGE 2 → IMAGE 3
-      ----------------------------------------------------- */
-
-      transition2.to(
-        outerNext,
-        {
-          opacity: 0,
-          scale: 1.2,
-
-          duration: IMAGE_REVEAL_DURATION,
-
-          ease: "power2.inOut",
-        },
-        OUTER_REVEAL_START
-      );
-
-      transition2.fromTo(
-        outerThird,
-        {
-          opacity: 0,
-          scale: 1.2,
-        },
-        {
-          opacity: 1,
-          scale: 1,
-
-          duration: IMAGE_REVEAL_DURATION,
-
-          ease: "power2.inOut",
-        },
-        OUTER_REVEAL_START
-      );
-
-
-      /* -----------------------------------------------------
-         BACKGROUND
-      ----------------------------------------------------- */
-
-      transition2.fromTo(
-        nextBackground,
-        {
-          rotation: 0,
-          scale: 1.04,
-        },
-        {
-          rotation: 8,
-          scale: 1.08,
-
-          duration: 2.7,
-
-          ease: "power2.inOut",
-
-          force3D: true,
-        },
-        0
-      );
-
-      transition2.to(
-        nextBackground,
-        {
-          opacity: 0,
-
-          duration: BACKGROUND_FADE_DURATION,
-
-          ease: "power2.inOut",
-        },
-        BACKGROUND_FADE_START
-      );
-
-      transition2.fromTo(
-        thirdBackground,
-        {
-          opacity: 0,
-
-          rotation: 0,
-
-          scale: 1.04,
-        },
-        {
-          opacity: 1,
-
-          rotation: 0,
-
-          scale: 1.04,
-
-          duration: BACKGROUND_FADE_DURATION,
-
-          ease: "power2.inOut",
-
-          force3D: true,
-        },
-        BACKGROUND_FADE_START
-      );
-
-
-      master.add(transition2);
-
-
-      /* =====================================================
-         HOLD IMAGE 3
-      ===================================================== */
-
-      master.to(
-        {},
-        {
-          duration: HOLD_DURATION,
-        }
-      );
-
-
-      /* =====================================================
-         TRANSITION 3
-
-         IMAGE 3 → IMAGE 4
-      ===================================================== */
-
-      const transition3 = gsap.timeline();
-
-
-      /* -----------------------------------------------------
-         INNER FRAME ROTATION
-      ----------------------------------------------------- */
-
-      transition3.to(
-        inner,
-        {
-          rotation: `+=${FRAME_ROTATION}`,
-
-          duration: FRAME_DURATION,
-
-          ease: "power3.inOut",
-
-          force3D: true,
-        },
-        0
-      );
-
-
-      /* -----------------------------------------------------
-         OUTER FRAME ROTATION
-      ----------------------------------------------------- */
-
-      transition3.to(
-        outer,
-        {
-          rotation: `+=${FRAME_ROTATION}`,
-
-          duration: FRAME_DURATION,
-
-          ease: "power3.inOut",
-
-          force3D: true,
-        },
-        FRAME_STAGGER
-      );
-
-
-      /* -----------------------------------------------------
-         INNER CIRCLE
-
-         IMAGE 3 → IMAGE 4
-      ----------------------------------------------------- */
-
-      transition3.to(
-        innerThird,
-        {
-          opacity: 0,
-          scale: 1.2,
-
-          duration: IMAGE_REVEAL_DURATION,
-
-          ease: "power2.inOut",
-        },
-        INNER_REVEAL_START
-      );
-
-      transition3.fromTo(
-        innerFourth,
-        {
-          opacity: 0,
-          scale: 1.2,
-        },
-        {
-          opacity: 1,
-          scale: 1,
-
-          duration: IMAGE_REVEAL_DURATION,
-
-          ease: "power2.inOut",
-        },
-        INNER_REVEAL_START
-      );
-
-
-      /* -----------------------------------------------------
-         OUTER CIRCLE
-
-         IMAGE 3 → IMAGE 4
-      ----------------------------------------------------- */
-
-      transition3.to(
-        outerThird,
-        {
-          opacity: 0,
-          scale: 1.2,
-
-          duration: IMAGE_REVEAL_DURATION,
-
-          ease: "power2.inOut",
-        },
-        OUTER_REVEAL_START
-      );
-
-      transition3.fromTo(
-        outerFourth,
-        {
-          opacity: 0,
-          scale: 1.2,
-        },
-        {
-          opacity: 1,
-          scale: 1,
-
-          duration: IMAGE_REVEAL_DURATION,
-
-          ease: "power2.inOut",
-        },
-        OUTER_REVEAL_START
-      );
-
-
-      /* -----------------------------------------------------
-         BACKGROUND
-      ----------------------------------------------------- */
-
-      transition3.fromTo(
-        thirdBackground,
-        {
-          rotation: 0,
-          scale: 1.04,
-        },
-        {
-          rotation: 8,
-          scale: 1.08,
-
-          duration: 2.7,
-
-          ease: "power2.inOut",
-
-          force3D: true,
-        },
-        0
-      );
-
-      transition3.to(
-        thirdBackground,
-        {
-          opacity: 0,
-
-          duration: BACKGROUND_FADE_DURATION,
-
-          ease: "power2.inOut",
-        },
-        BACKGROUND_FADE_START
-      );
-
-      transition3.fromTo(
-        fourthBackground,
-        {
-          opacity: 0,
-
-          rotation: 0,
-
-          scale: 1.04,
-        },
-        {
-          opacity: 1,
-
-          rotation: 0,
-
-          scale: 1.04,
-
-          duration: BACKGROUND_FADE_DURATION,
-
-          ease: "power2.inOut",
-
-          force3D: true,
-        },
-        BACKGROUND_FADE_START
-      );
-
-
-      master.add(transition3);
 
 
       /* =====================================================
@@ -849,30 +440,27 @@ export default function DestinationScroller() {
 
       ScrollTrigger.create({
         trigger: section,
-
         start: "top top",
-
         end: "+=4500",
-
         pin: true,
-
         scrub: 0.15,
-
         animation: master,
-
         anticipatePin: 1,
-
         invalidateOnRefresh: true,
-
         fastScrollEnd: true,
       });
 
+
     }, section);
 
-    return () => {
-      ctx.revert();
-    };
+    return () => ctx.revert();
+
   }, []);
+
+
+  /* =======================================================
+     JSX
+  ======================================================= */
 
   return (
     <section
@@ -881,112 +469,73 @@ export default function DestinationScroller() {
     >
 
       {/* ==================================================
-          BACKGROUND
+          BACKGROUND LAYER
       ================================================== */}
 
       <div className="destination-background">
-
-        <img
-          className="background-current"
-          src={destinations[0]}
-          alt=""
-        />
-
-        <img
-          className="background-next"
-          src={destinations[1]}
-          alt=""
-        />
-
-        <img
-          className="background-third"
-          src={destinations[2]}
-          alt=""
-        />
-
-        <img
-          className="background-fourth"
-          src={destinations[3]}
-          alt=""
-        />
-
+        {destinations.map((src, i) => (
+          <img
+            key={i}
+            className={
+              ["background-current",
+               "background-next",
+               "background-third",
+               "background-fourth"][i]
+            }
+            src={src}
+            alt=""
+          />
+        ))}
       </div>
 
 
       {/* ==================================================
-          TWO FRAME VINYL
+          VINYL CONTAINER
       ================================================== */}
 
       <div className="vinyl-container">
 
-        {/* =================================================
-            LOGO
-        ================================================= */}
-        <img src={logo} alt="Logo" className="vinyl-logo" />
+        {/* LOGO */}
+        <img
+          src={logo}
+          alt="Logo"
+          className="vinyl-logo"
+        />
 
-        {/* =================================================
-            OUTER FRAME
-        ================================================= */}
-
+        {/* OUTER FRAME */}
         <div className="vinyl-frame frame-outer">
-
-          <img
-            className="vinyl-image current-image"
-            src={destinations[0]}
-            alt=""
-          />
-
-          <img
-            className="vinyl-image next-image"
-            src={destinations[1]}
-            alt=""
-          />
-
-          <img
-            className="vinyl-image third-image"
-            src={destinations[2]}
-            alt=""
-          />
-
-          <img
-            className="vinyl-image fourth-image"
-            src={destinations[3]}
-            alt=""
-          />
-
+          {destinations.map((src, i) => (
+            <img
+              key={i}
+              className={
+                "vinyl-image " +
+                ["current-image",
+                 "next-image",
+                 "third-image",
+                 "fourth-image"][i]
+              }
+              src={src}
+              alt=""
+            />
+          ))}
         </div>
 
-
-        {/* =================================================
-            INNER FRAME
-        ================================================= */}
-
+        {/* INNER FRAME */}
         <div className="vinyl-frame frame-inner">
-
-          <img
-            className="vinyl-image current-image"
-            src={destinations[0]}
-            alt=""
-          />
-
-          <img
-            className="vinyl-image next-image"
-            src={destinations[1]}
-            alt=""
-          />
-
-          <img
-            className="vinyl-image third-image"
-            src={destinations[2]}
-            alt=""
-          />
-
-          <img
-            className="vinyl-image fourth-image"
-            src={destinations[3]}
-            alt=""
-          />
-
+          {destinations.map((src, i) => (
+            <img
+              key={i}
+              className={
+                "vinyl-image " +
+                ["current-image",
+                 "next-image",
+                 "third-image",
+                 "fourth-image"][i]
+              }
+              src={src}
+              alt=""
+            />
+          ))}
         </div>
 
       </div>

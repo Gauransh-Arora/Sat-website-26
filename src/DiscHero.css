@@ -1,0 +1,412 @@
+/* =========================================================
+   DISC HERO — CONTAINER
+========================================================= */
+
+.disc-hero {
+  position: relative;
+
+  width: 100%;
+  height: 100vh;
+  min-height: 600px;
+  max-height: 900px;
+
+  overflow: hidden;
+
+  background: #0a0a0a;
+
+  color: #fff;
+
+  user-select: none;
+}
+
+
+/* =========================================================
+   FULL-BLEED BACKGROUND
+========================================================= */
+
+.disc-hero__bg {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+}
+
+.disc-hero__bg-img {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+
+  /*
+   * Slight overscan hides edges during the
+   * gentle idle zoom.
+   */
+  transform: scale(1.06);
+
+  transform-origin: 50% 50%;
+
+  will-change: transform;
+}
+
+.disc-hero__bg-img--idle {
+  animation: discHeroZoom 12s ease-in-out infinite alternate;
+}
+
+
+/* =========================================================
+   BACKGROUND OVERLAYS
+========================================================= */
+
+.disc-hero__overlay-lr {
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.60),
+      rgba(0, 0, 0, 0.15) 50%,
+      rgba(0, 0, 0, 0.08)
+    );
+
+  pointer-events: none;
+}
+
+.disc-hero__overlay-bt {
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.55),
+      transparent 50%,
+      transparent
+    );
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   CONCENTRIC DECORATIVE RINGS
+
+   Static. Anchored at the disc's resting position.
+========================================================= */
+
+.disc-hero__rings {
+  position: absolute;
+
+  left: 20%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  pointer-events: none;
+}
+
+.disc-hero__ring {
+  position: absolute;
+
+  border-radius: 50%;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  /*
+   * Each ring is centered on (0, 0) of .disc-hero__rings
+   * via negative margin equal to half its size.
+   */
+}
+
+
+/* =========================================================
+   PINWHEEL DISC
+
+   This is the rotating, faceted shape that hides
+   the hard background cut during transitions.
+
+   At rest it sits static and transparent (invisible).
+   During a spin it shows the INCOMING image so the
+   viewer's eye sees continuous motion, then the full
+   background swaps at the 50% mark.
+========================================================= */
+
+.disc-hero__disc {
+  position: absolute;
+
+  left: 20%;
+  top: 50%;
+
+  width: 300px;
+  height: 300px;
+
+  transform: translate(-50%, -50%);
+
+  overflow: hidden;
+
+  pointer-events: none;
+
+  /*
+   * Hidden when not spinning.
+   */
+  opacity: 0;
+
+  will-change: transform, opacity;
+}
+
+.disc-hero__disc--spinning {
+  opacity: 1;
+
+  animation: discSpin var(--spin-duration) linear forwards;
+}
+
+.disc-hero__disc-img {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  filter: saturate(1.05);
+}
+
+
+/* =========================================================
+   TITLE BLOCK
+========================================================= */
+
+.disc-hero__title-block {
+  position: absolute;
+
+  left: clamp(2rem, 5vw, 4rem);
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  transition:
+    opacity 500ms ease,
+    transform 500ms ease;
+}
+
+.disc-hero__title-block--hidden {
+  opacity: 0;
+
+  transform: translateY(-50%) translateX(-12px);
+}
+
+.disc-hero__title {
+  margin: 0;
+
+  font-size: clamp(2rem, 5vw, 3.75rem);
+  font-weight: 300;
+
+  letter-spacing: 0.35em;
+
+  text-transform: uppercase;
+
+  line-height: 1.1;
+}
+
+.disc-hero__place {
+  margin-top: 0.75rem;
+
+  font-size: clamp(0.65rem, 1.2vw, 0.875rem);
+
+  letter-spacing: 0.4em;
+
+  color: rgba(255, 255, 255, 0.65);
+}
+
+
+/* =========================================================
+   BOTTOM-LEFT INDEX
+========================================================= */
+
+.disc-hero__index {
+  position: absolute;
+
+  bottom: 2rem;
+  left: 2rem;
+
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  font-size: 11px;
+  letter-spacing: 0.15em;
+
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.disc-hero__index-divider {
+  width: 1px;
+  height: 1rem;
+
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.disc-hero__index-total {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+
+/* =========================================================
+   BOTTOM-RIGHT CONTROLS
+========================================================= */
+
+.disc-hero__controls {
+  position: absolute;
+
+  bottom: 2rem;
+  right: 2rem;
+
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.disc-hero__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  transition: background 200ms ease;
+}
+
+.disc-hero__btn--prev {
+  width: 2rem;
+  height: 2rem;
+
+  background: transparent;
+
+  border: 1px solid rgba(255, 255, 255, 0.30);
+
+  color: rgba(255, 255, 255, 0.80);
+}
+
+.disc-hero__btn--prev:hover {
+  background: rgba(255, 255, 255, 0.10);
+}
+
+.disc-hero__btn--next {
+  width: 2.5rem;
+  height: 2.5rem;
+
+  background: #e8a838;
+
+  color: #000;
+}
+
+.disc-hero__btn--next:hover {
+  background: #f0bc5a;
+}
+
+
+/* =========================================================
+   TOP NAV
+========================================================= */
+
+.disc-hero__nav {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 1.5rem 2rem;
+
+  font-size: 11px;
+  letter-spacing: 0.2em;
+
+  color: rgba(255, 255, 255, 0.75);
+
+  pointer-events: auto;
+}
+
+.disc-hero__nav-brand {
+  font-weight: 600;
+
+  letter-spacing: 0.35em;
+}
+
+.disc-hero__nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.disc-hero__nav-link {
+  display: none;
+}
+
+@media (min-width: 640px) {
+
+  .disc-hero__nav-link {
+    display: inline;
+  }
+
+}
+
+
+/* =========================================================
+   KEYFRAMES
+========================================================= */
+
+@keyframes discHeroZoom {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: scale(1.14);
+  }
+}
+
+@keyframes discSpin {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) rotate(180deg) scale(1.04);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg) scale(1);
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .disc-hero__bg-img--idle {
+    animation: none;
+  }
+
+  .disc-hero__disc--spinning {
+    animation: none;
+  }
+
+}

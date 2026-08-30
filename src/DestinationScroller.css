@@ -18,7 +18,12 @@
 
 
 /* =========================================================
-   BACKGROUND
+   BACKGROUND LAYER
+
+   One <img> per destination, absolutely stacked.
+   Only opacity and a slow rotate/scale drift ever
+   animate here — this layer is never the transition
+   itself, just an ambient backdrop.
 ========================================================= */
 
 .destination-background {
@@ -47,62 +52,44 @@
   display: block;
 
   object-fit: cover;
-
   object-position: center;
 
   /*
-   * Overscan.
+   * Overscanned to avoid edge gaps during the
+   * background rotate/scale drift.
    */
   transform:
-    translate3d(0, 0, 0) scale(1.2);
+    translate3d(0, 0, 0)
+    scale(1.2);
 
   transform-origin: 50% 50%;
 
   backface-visibility: hidden;
-
   -webkit-backface-visibility: hidden;
 
-  will-change:
-    opacity,
-    transform;
+  will-change: opacity, transform;
 
   pointer-events: none;
-
   user-select: none;
 }
 
 
 /* =========================================================
-   BACKGROUND LAYERS
+   BACKGROUND LAYERS (z-index ascending)
 ========================================================= */
 
-.background-current {
-  z-index: 1;
-
-  opacity: 1;
-}
-
-.background-next {
-  z-index: 2;
-
-  opacity: 0;
-}
-
-.background-third {
-  z-index: 3;
-
-  opacity: 0;
-}
-
-.background-fourth {
-  z-index: 4;
-
-  opacity: 0;
-}
+.background-current { z-index: 1; opacity: 1; }
+.background-next    { z-index: 2; opacity: 0; }
+.background-third   { z-index: 3; opacity: 0; }
+.background-fourth  { z-index: 4; opacity: 0; }
 
 
 /* =========================================================
    VINYL CONTAINER
+
+   Non-rotating wrapper, centered on screen.
+   It never transforms beyond centering;
+   it only positions its two children.
 ========================================================= */
 
 .vinyl-container {
@@ -115,14 +102,9 @@
 
   aspect-ratio: 1 / 1;
 
-  /*
-   * The container never rotates.
-   */
-  transform:
-    translate3d(-50%, -50%, 0);
+  transform: translate3d(-50%, -50%, 0);
 
   transform-origin: 50% 50%;
-
   transform-style: preserve-3d;
 
   z-index: 5;
@@ -130,13 +112,14 @@
   pointer-events: none;
 
   backface-visibility: hidden;
-
   -webkit-backface-visibility: hidden;
 }
 
 
 /* =========================================================
    VINYL LOGO
+
+   Static, non-rotating, centered on the container.
 ========================================================= */
 
 .vinyl-logo {
@@ -148,18 +131,19 @@
   transform: translate3d(-50%, -50%, 0);
 
   width: 100%;
-  /* max-width: 400px; */
 
   z-index: 20;
 
   pointer-events: none;
-
   user-select: none;
 }
 
 
 /* =========================================================
-   VINYL FRAME
+   VINYL FRAME (shared)
+
+   Both concentric circular frames share this base.
+   GSAP controls transform (xPercent/yPercent/rotation).
 ========================================================= */
 
 .vinyl-frame {
@@ -168,31 +152,21 @@
   left: 50%;
   top: 50%;
 
-  /*
-   * GSAP controls the transform.
-   */
   transform-origin: 50% 50%;
-
   transform-style: preserve-3d;
 
   backface-visibility: hidden;
-
   -webkit-backface-visibility: hidden;
 
   border-radius: 50%;
-
   overflow: hidden;
 
-  clip-path:
-    circle(50% at 50% 50%);
-
-  -webkit-clip-path:
-    circle(50% at 50% 50%);
+  clip-path: circle(50% at 50% 50%);
+  -webkit-clip-path: circle(50% at 50% 50%);
 
   box-sizing: border-box;
 
   will-change: transform;
-
   contain: paint;
 
   pointer-events: none;
@@ -200,7 +174,10 @@
 
 
 /* =========================================================
-   VINYL IMAGE
+   VINYL IMAGE (shared)
+
+   Images inside the frames. They do NOT counter-rotate —
+   the photo content visibly spins with its frame.
 ========================================================= */
 
 .vinyl-image {
@@ -211,70 +188,43 @@
   max-width: none;
 
   object-fit: cover;
-
   object-position: center;
 
   pointer-events: none;
-
   user-select: none;
 
   border-radius: 50%;
 
-  clip-path:
-    circle(50% at 50% 50%);
+  clip-path: circle(50% at 50% 50%);
+  -webkit-clip-path: circle(50% at 50% 50%);
 
-  -webkit-clip-path:
-    circle(50% at 50% 50%);
-
-  /*
-   * The image itself does NOT have its own rotation.
-   *
-   * The frame containing it rotates.
-   */
-  transform:
-    translate3d(0, 0, 0);
-
+  transform: translate3d(0, 0, 0);
   transform-origin: 50% 50%;
 
   backface-visibility: hidden;
-
   -webkit-backface-visibility: hidden;
 
-  will-change: opacity;
+  will-change: opacity, transform;
 }
 
 
 /* =========================================================
    IMAGE LAYERS
+
+   Stacked by z-index (current on top).
+   All start at opacity: 0 except current at opacity: 1.
 ========================================================= */
 
-.current-image {
-  z-index: 4;
-
-  opacity: 1;
-}
-
-.next-image {
-  z-index: 3;
-
-  opacity: 0;
-}
-
-.third-image {
-  z-index: 2;
-
-  opacity: 0;
-}
-
-.fourth-image {
-  z-index: 1;
-
-  opacity: 0;
-}
+.current-image { z-index: 4; opacity: 1; }
+.next-image    { z-index: 3; opacity: 0; }
+.third-image   { z-index: 2; opacity: 0; }
+.fourth-image  { z-index: 1; opacity: 0; }
 
 
 /* =========================================================
    OUTER FRAME
+
+   125% of container size.
 ========================================================= */
 
 .frame-outer {
@@ -285,6 +235,9 @@
 
 /* =========================================================
    OUTER FRAME IMAGE
+
+   Inset to 80% width/height so a visible ring/margin
+   remains around the image.
 ========================================================= */
 
 .frame-outer .vinyl-image {
@@ -298,15 +251,11 @@
 
 /* =========================================================
    OUTER FRAME SOFT-LIGHT OVERLAY
-========================================================= */
 
-/*
- * ONLY the outer circular image gets this overlay.
- *
- * #050f20
- * 46% opacity
- * soft-light
- */
+   ::before — dark navy tint at ~46% opacity,
+   mix-blend-mode: soft-light, so the outer ring
+   reads as a distinct halo from the inner disc.
+========================================================= */
 
 .frame-outer::before {
   content: "";
@@ -335,15 +284,9 @@
 
 /* =========================================================
    OUTER FRAME WHITE BOUNDARY
-========================================================= */
 
-/*
- * The outer frame is 125%.
- *
- * The actual visible image is 80% of that frame.
- *
- * Therefore the white boundary follows the 80% image.
- */
+   ::after — white border following the 80% image area.
+========================================================= */
 
 .frame-outer::after {
   content: "";
@@ -370,6 +313,8 @@
 
 /* =========================================================
    INNER FRAME
+
+   60% of container size. Plain white border, no tint.
 ========================================================= */
 
 .frame-inner {
@@ -382,6 +327,9 @@
 
 /* =========================================================
    INNER FRAME IMAGE
+
+   Oversized to ~167% and centered so it fully covers
+   the circle.
 ========================================================= */
 
 .frame-inner .vinyl-image {
@@ -397,68 +345,40 @@
    RESPONSIVE
 ========================================================= */
 
-
-/* ---------------------------------------------------------
-   LARGE DESKTOP
---------------------------------------------------------- */
-
+/* Large Desktop */
 @media (min-width: 1200px) {
-
   .vinyl-container {
     width: min(100vw, 1100px);
   }
-
 }
 
-
-/* ---------------------------------------------------------
-   TABLET
---------------------------------------------------------- */
-
+/* Tablet */
 @media (max-width: 900px) {
-
   .destination-section {
     min-height: 600px;
   }
-
   .vinyl-container {
     width: 110vw;
-
     max-width: none;
   }
-
 }
 
-
-/* ---------------------------------------------------------
-   MOBILE
---------------------------------------------------------- */
-
+/* Mobile */
 @media (max-width: 700px) {
-
   .destination-section {
     min-height: 600px;
   }
-
   .vinyl-container {
     width: 135vw;
-
     max-width: none;
   }
-
 }
 
-
-/* ---------------------------------------------------------
-   SMALL MOBILE
---------------------------------------------------------- */
-
+/* Small Mobile */
 @media (max-width: 420px) {
-
   .vinyl-container {
     width: 155vw;
   }
-
 }
 
 
@@ -467,10 +387,11 @@
 ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
-
   .vinyl-frame,
   .destination-background img {
     will-change: auto;
   }
-
+  .vinyl-image {
+    will-change: auto;
+  }
 }
