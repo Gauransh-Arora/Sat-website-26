@@ -12,8 +12,6 @@
   overflow: hidden;
 
   background: #111;
-
-  isolation: isolate;
 }
 
 
@@ -21,9 +19,9 @@
    BACKGROUND LAYER
 
    One <img> per destination, absolutely stacked.
-   Only opacity and a slow rotate/scale drift ever
-   animate here — this layer is never the transition
-   itself, just an ambient backdrop.
+   Third concentric layer in the Dribbble clip —
+   it spins after the outer ring, overscanned so
+   rotation never shows a raw edge.
 ========================================================= */
 
 .destination-background {
@@ -44,30 +42,17 @@
 .destination-background img {
   position: absolute;
 
-  inset: 0;
+  inset: -20%;
 
-  width: 100%;
-  height: 100%;
+  width: 140%;
+  height: 140%;
 
   display: block;
 
   object-fit: cover;
   object-position: center;
 
-  /*
-   * Overscanned to avoid edge gaps during the
-   * background rotate/scale drift.
-   */
-  transform:
-    translate3d(0, 0, 0)
-    scale(1.2);
-
-  transform-origin: 50% 50%;
-
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-
-  will-change: opacity, transform;
+  will-change: transform, opacity;
 
   pointer-events: none;
   user-select: none;
@@ -104,15 +89,9 @@
 
   transform: translate3d(-50%, -50%, 0);
 
-  transform-origin: 50% 50%;
-  transform-style: preserve-3d;
-
   z-index: 5;
 
   pointer-events: none;
-
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
 }
 
 
@@ -153,31 +132,41 @@
   top: 50%;
 
   transform-origin: 50% 50%;
-  transform-style: preserve-3d;
-
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-
-  border-radius: 50%;
-  overflow: hidden;
-
-  clip-path: circle(50% at 50% 50%);
-  -webkit-clip-path: circle(50% at 50% 50%);
 
   box-sizing: border-box;
 
   will-change: transform;
-  contain: paint;
 
   pointer-events: none;
+}
+
+
+/*
+ * Circular mask lives on a NON-transformed child.
+ * overflow/clip-path on the same node GSAP rotates
+ * (force3D / translateZ) drops the mask mid-spin and
+ * the oversized square photo corners become visible.
+ */
+.vinyl-clip {
+  position: absolute;
+
+  inset: 0;
+
+  overflow: hidden;
+
+  border-radius: 50%;
+
+  clip-path: circle(50% at 50% 50%);
+  -webkit-clip-path: circle(50% at 50% 50%);
 }
 
 
 /* =========================================================
    VINYL IMAGE (shared)
 
-   Images inside the frames. They do NOT counter-rotate —
-   the photo content visibly spins with its frame.
+   Cropped to the same container-sized rectangle in both
+   rings so they register at rest. Photos spin with their
+   frames, matching the Dribbble clip.
 ========================================================= */
 
 .vinyl-image {
@@ -193,18 +182,7 @@
   pointer-events: none;
   user-select: none;
 
-  border-radius: 50%;
-
-  clip-path: circle(50% at 50% 50%);
-  -webkit-clip-path: circle(50% at 50% 50%);
-
-  transform: translate3d(0, 0, 0);
   transform-origin: 50% 50%;
-
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-
-  will-change: opacity, transform;
 }
 
 
@@ -224,55 +202,34 @@
 /* =========================================================
    OUTER FRAME
 
-   125% of container size.
+   Same size as the vinyl container. The old 125% box
+   clipped a third circle that is not in the Dribbble
+   shot — only two white rings (inner + outer).
 ========================================================= */
 
 .frame-outer {
-  width: 125%;
-  height: 125%;
+  width: 100%;
+  height: 100%;
 }
 
-
-/* =========================================================
-   OUTER FRAME IMAGE
-
-   Inset to 80% width/height so a visible ring/margin
-   remains around the image.
-========================================================= */
 
 .frame-outer .vinyl-image {
-  width: 80%;
-  height: 80%;
+  width: 100%;
+  height: 100%;
 
-  left: 10%;
-  top: 10%;
+  left: 0;
+  top: 0;
 }
 
-
-/* =========================================================
-   OUTER FRAME SOFT-LIGHT OVERLAY
-
-   ::before — dark navy tint at ~46% opacity,
-   mix-blend-mode: soft-light, so the outer ring
-   reads as a distinct halo from the inner disc.
-========================================================= */
 
 .frame-outer::before {
   content: "";
 
   position: absolute;
 
-  left: 10%;
-  top: 10%;
+  inset: 0;
 
-  width: 80%;
-  height: 80%;
-
-  background: #050f20;
-
-  opacity: 0.46;
-
-  mix-blend-mode: soft-light;
+  background: rgba(0, 0, 0, 0.22);
 
   border-radius: 50%;
 
@@ -282,22 +239,12 @@
 }
 
 
-/* =========================================================
-   OUTER FRAME WHITE BOUNDARY
-
-   ::after — white border following the 80% image area.
-========================================================= */
-
 .frame-outer::after {
   content: "";
 
   position: absolute;
 
-  left: 10%;
-  top: 10%;
-
-  width: 80%;
-  height: 80%;
+  inset: 0;
 
   border: 2px solid #fff;
 
@@ -320,24 +267,40 @@
 .frame-inner {
   width: 60%;
   height: 60%;
+}
+
+.frame-inner::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
 
   border: 2px solid #fff;
+  border-radius: 50%;
+
+  box-sizing: border-box;
+
+  pointer-events: none;
+
+  z-index: 11;
 }
 
 
 /* =========================================================
    INNER FRAME IMAGE
 
-   Oversized to ~167% and centered so it fully covers
-   the circle.
+   Same world rectangle as the outer image:
+   100% of .vinyl-container, centered.
+   166.67% of a 60% frame = 100% of the container.
 ========================================================= */
 
 .frame-inner .vinyl-image {
-  width: 166.67%;
-  height: 166.67%;
+  width: 166.6667%;
+  height: 166.6667%;
 
-  left: -33.33%;
-  top: -33.33%;
+  left: -33.3333%;
+  top: -33.3333%;
 }
 
 

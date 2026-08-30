@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
+import { Observer } from "gsap/Observer";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import frame1 from "./assets/frame1.jpeg";
@@ -10,7 +11,7 @@ import logo from "./assets/logo.png";
 
 import "./DestinationScroller.css";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, Observer);
 
 const destinations = [frame1, frame2, frame3, frame4];
 
@@ -59,7 +60,6 @@ export default function DestinationScroller() {
         fourth:  outer.querySelector(".fourth-image")!,
       };
 
-
       /* =====================================================
          BACKGROUND ELEMENTS
       ===================================================== */
@@ -77,55 +77,27 @@ export default function DestinationScroller() {
       ===================================================== */
 
       /*
-       * Full rotation per transition.
+       * Source of truth: Dribbble Roto-transitions clip
+       * https://cdn.dribbble.com/userupload/25500276/file/small-fc586f02ea76e3a56db6ebbb5e5784dd.mp4
+       *
+       * ~18.4s / 60fps. Three concentric layers of the
+       * same photo (inner disc, outer ring, full bleed).
+       * Inner leads, outer follows, background last.
+       * Photos spin with their layer. Image cuts at
+       * peak angular speed. Layers only line up at rest.
        */
       const ROTATION = 360;
+      const SPIN_DURATION = 1.85;
+      const STAGGER = 0.22;
+      const ROTO_EASE = "cubic-bezier(0.65, 0, 0.35, 1)";
+      const STEP_DURATION = SPIN_DURATION + STAGGER * 2;
 
-      /*
-       * Duration of each frame's 360° spin.
-       */
-      const SPIN_DURATION = 2.2;
+      const INNER_CROSS_START = SPIN_DURATION * 0.5;
+      const OUTER_CROSS_START = STAGGER + SPIN_DURATION * 0.5;
+      const BG_CROSS_START = STAGGER * 2 + SPIN_DURATION * 0.5;
+      const CROSS_DURATION = 0.12;
 
-      /*
-       * Outer frame starts this many seconds after
-       * the inner frame.
-       */
-      const STAGGER = 0.5;
-
-      /*
-       * Inner image cross begins at ~66% through
-       * the inner frame's rotation.
-       *
-       * 2.2 × 0.66 ≈ 1.45
-       */
-      const INNER_CROSS_START = 1.45;
-
-      /*
-       * Outer image cross begins at ~57% through
-       * the outer frame's rotation, measured from
-       * the outer frame's own start.
-       *
-       * 0.5 + 2.2 × 0.57 ≈ 1.75
-       */
-      const OUTER_CROSS_START = 1.75;
-
-      /*
-       * Duration of each fade+scale image cross.
-       */
-      const CROSS_DURATION = 0.55;
-
-      /*
-       * Background crossfade lands right as the
-       * outer ring's reveal finishes.
-       */
-      const BG_FADE_START = 1.85;
-      const BG_FADE_DURATION = 0.7;
-
-      /*
-       * Hold on the settled state before the next
-       * transition begins.
-       */
-      const HOLD = 1.2;
+      const STEPS = destinations.length - 1;
 
 
       /* =====================================================
@@ -154,14 +126,14 @@ export default function DestinationScroller() {
       ===================================================== */
 
       [innerImg.current, outerImg.current].forEach(
-        (el) => gsap.set(el, { opacity: 1, scale: 1 }),
+        (el) => gsap.set(el, { opacity: 1 }),
       );
 
       [
         innerImg.next, innerImg.third, innerImg.fourth,
         outerImg.next, outerImg.third, outerImg.fourth,
       ].forEach(
-        (el) => gsap.set(el, { opacity: 0, scale: 1 }),
+        (el) => gsap.set(el, { opacity: 0 }),
       );
 
 
@@ -172,7 +144,7 @@ export default function DestinationScroller() {
       gsap.set(bg.current, {
         opacity: 1,
         rotation: 0,
-        scale: 1.04,
+        scale: 1.35,
         transformOrigin: "50% 50%",
         force3D: true,
       });
@@ -181,7 +153,7 @@ export default function DestinationScroller() {
         gsap.set(el, {
           opacity: 0,
           rotation: 0,
-          scale: 1.04,
+          scale: 1.35,
           transformOrigin: "50% 50%",
           force3D: true,
         });
@@ -215,161 +187,65 @@ export default function DestinationScroller() {
 
         const tl = gsap.timeline();
 
-
-        /* -------------------------------------------------
-           INNER FRAME ROTATION
-
-           +360°, starts at t=0
-        ------------------------------------------------- */
+        const cut = (
+          outgoing: Element,
+          incoming: Element,
+          at: number,
+        ) => {
+          tl.to(
+            outgoing,
+            { opacity: 0, duration: CROSS_DURATION, ease: "none" },
+            at,
+          );
+          tl.fromTo(
+            incoming,
+            { opacity: 0 },
+            {
+              opacity: 1,
+              duration: CROSS_DURATION,
+              ease: "none",
+              immediateRender: false,
+            },
+            at,
+          );
+        };
 
         tl.to(
           inner,
           {
             rotation: `+=${ROTATION}`,
             duration: SPIN_DURATION,
-            ease: "power3.inOut",
+            ease: ROTO_EASE,
             force3D: true,
           },
           0,
         );
-
-
-        /* -------------------------------------------------
-           OUTER FRAME ROTATION
-
-           +360°, starts at t=STAGGER
-        ------------------------------------------------- */
 
         tl.to(
           outer,
           {
             rotation: `+=${ROTATION}`,
             duration: SPIN_DURATION,
-            ease: "power3.inOut",
+            ease: ROTO_EASE,
             force3D: true,
           },
           STAGGER,
         );
 
-
-        /* -------------------------------------------------
-           INNER IMAGE CROSS
-
-           At ~66% through the inner frame's rotation:
-           - outgoing: opacity 1→0, scale 1→1.2
-           - incoming: opacity 0→1, scale 1.2→1
-        ------------------------------------------------- */
-
-        tl.to(
-          innerOut,
-          {
-            opacity: 0,
-            scale: 1.2,
-            duration: CROSS_DURATION,
-            ease: "power2.inOut",
-          },
-          INNER_CROSS_START,
-        );
-
-        tl.fromTo(
-          innerIn,
-          { opacity: 0, scale: 1.2 },
-          {
-            opacity: 1,
-            scale: 1,
-            duration: CROSS_DURATION,
-            ease: "power2.inOut",
-          },
-          INNER_CROSS_START,
-        );
-
-
-        /* -------------------------------------------------
-           OUTER IMAGE CROSS
-
-           A beat later, at ~57% through the outer
-           frame's own rotation:
-           - outgoing: opacity 1→0, scale 1→1.2
-           - incoming: opacity 0→1, scale 1.2→1
-        ------------------------------------------------- */
-
-        tl.to(
-          outerOut,
-          {
-            opacity: 0,
-            scale: 1.2,
-            duration: CROSS_DURATION,
-            ease: "power2.inOut",
-          },
-          OUTER_CROSS_START,
-        );
-
-        tl.fromTo(
-          outerIn,
-          { opacity: 0, scale: 1.2 },
-          {
-            opacity: 1,
-            scale: 1,
-            duration: CROSS_DURATION,
-            ease: "power2.inOut",
-          },
-          OUTER_CROSS_START,
-        );
-
-
-        /* -------------------------------------------------
-           BACKGROUND DRIFT
-
-           Slow rotate(0→8°) + scale(1.04→1.08)
-           on the outgoing background for ambient motion
-           while it's still visible.
-        ------------------------------------------------- */
-
-        tl.fromTo(
-          bgOut,
-          { rotation: 0, scale: 1.04 },
-          {
-            rotation: 8,
-            scale: 1.08,
-            duration: 2.7,
-            ease: "power2.inOut",
-            force3D: true,
-          },
-          0,
-        );
-
-
-        /* -------------------------------------------------
-           BACKGROUND CROSSFADE
-
-           Timed to land right as the outer ring's
-           reveal finishes.
-        ------------------------------------------------- */
-
         tl.to(
           bgOut,
           {
-            opacity: 0,
-            duration: BG_FADE_DURATION,
-            ease: "power2.inOut",
-          },
-          BG_FADE_START,
-        );
-
-        tl.fromTo(
-          bgIn,
-          { opacity: 0, rotation: 0, scale: 1.04 },
-          {
-            opacity: 1,
-            rotation: 0,
-            scale: 1.04,
-            duration: BG_FADE_DURATION,
-            ease: "power2.inOut",
+            rotation: `+=${ROTATION}`,
+            duration: SPIN_DURATION,
+            ease: ROTO_EASE,
             force3D: true,
           },
-          BG_FADE_START,
+          STAGGER * 2,
         );
 
+        cut(innerOut, innerIn, INNER_CROSS_START);
+        cut(outerOut, outerIn, OUTER_CROSS_START);
+        cut(bgOut, bgIn, BG_CROSS_START);
 
         return tl;
       }
@@ -397,13 +273,6 @@ export default function DestinationScroller() {
         }),
       );
 
-      master.to({}, { duration: HOLD });
-
-
-      /* =====================================================
-         TRANSITION 2 — IMAGE 2 → IMAGE 3
-      ===================================================== */
-
       master.add(
         createTransition({
           innerOut: innerImg.next,
@@ -414,13 +283,6 @@ export default function DestinationScroller() {
           bgIn:     bg.third,
         }),
       );
-
-      master.to({}, { duration: HOLD });
-
-
-      /* =====================================================
-         TRANSITION 3 — IMAGE 3 → IMAGE 4
-      ===================================================== */
 
       master.add(
         createTransition({
@@ -436,18 +298,53 @@ export default function DestinationScroller() {
 
       /* =====================================================
          SCROLLTRIGGER
+
+         One snap = one complete destination change.
+         A wheel tick / swipe settles on the next frame
+         instead of leaving the spin half-finished.
       ===================================================== */
 
       ScrollTrigger.create({
         trigger: section,
         start: "top top",
-        end: "+=4500",
+        end: "bottom top",
         pin: true,
-        scrub: 0.15,
-        animation: master,
         anticipatePin: 1,
-        invalidateOnRefresh: true,
-        fastScrollEnd: true,
+      });
+
+      /*
+       * Time-based playback, not scrub. Scrub+snap made
+       * the spin trail the wheel and hitch every tick.
+       * One gesture plays one full destination change.
+       */
+      let step = 0;
+      let busy = false;
+
+      const playStep = (next: number) => {
+        const clamped = gsap.utils.clamp(0, STEPS, next);
+        if (busy || clamped === step) return;
+
+        busy = true;
+        step = clamped;
+
+        gsap.to(master, {
+          totalProgress: clamped / STEPS,
+          duration: STEP_DURATION,
+          ease: "none",
+          overwrite: true,
+          onComplete: () => {
+            busy = false;
+          },
+        });
+      };
+
+      Observer.create({
+        target: window,
+        type: "wheel,touch,pointer",
+        tolerance: 12,
+        preventDefault: true,
+        onDown: () => playStep(step + 1),
+        onUp: () => playStep(step - 1),
       });
 
 
@@ -504,38 +401,42 @@ export default function DestinationScroller() {
 
         {/* OUTER FRAME */}
         <div className="vinyl-frame frame-outer">
-          {destinations.map((src, i) => (
-            <img
-              key={i}
-              className={
-                "vinyl-image " +
-                ["current-image",
-                 "next-image",
-                 "third-image",
-                 "fourth-image"][i]
-              }
-              src={src}
-              alt=""
-            />
-          ))}
+          <div className="vinyl-clip">
+            {destinations.map((src, i) => (
+              <img
+                key={i}
+                className={
+                  "vinyl-image " +
+                  ["current-image",
+                   "next-image",
+                   "third-image",
+                   "fourth-image"][i]
+                }
+                src={src}
+                alt=""
+              />
+            ))}
+          </div>
         </div>
 
         {/* INNER FRAME */}
         <div className="vinyl-frame frame-inner">
-          {destinations.map((src, i) => (
-            <img
-              key={i}
-              className={
-                "vinyl-image " +
-                ["current-image",
-                 "next-image",
-                 "third-image",
-                 "fourth-image"][i]
-              }
-              src={src}
-              alt=""
-            />
-          ))}
+          <div className="vinyl-clip">
+            {destinations.map((src, i) => (
+              <img
+                key={i}
+                className={
+                  "vinyl-image " +
+                  ["current-image",
+                   "next-image",
+                   "third-image",
+                   "fourth-image"][i]
+                }
+                src={src}
+                alt=""
+              />
+            ))}
+          </div>
         </div>
 
       </div>
