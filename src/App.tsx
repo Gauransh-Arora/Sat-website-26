@@ -1,13 +1,18 @@
-
-import DestinationScroller from './DestinationScroller.tsx'
+import DestinationScroller from './components/DestinationScroller.tsx'
+import Navbar from './components/Navbar.tsx'
+import VideoLoader from './components/VideoLoader.tsx'
 
 function App() {
 
   return (
-    <DestinationScroller/>
-    // <DestinationScroller2/>
-    // <DestinationHero/>
-    // <DiscHero/>
+    <>
+      <VideoLoader />
+      <Navbar />
+      <DestinationScroller/>
+      {/* <DestinationScroller2/> */}
+      {/* <DestinationHero/> */}
+      {/* <DiscHero/> */}
+    </>
     
   )
 }

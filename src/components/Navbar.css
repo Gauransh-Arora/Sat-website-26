@@ -1,0 +1,164 @@
+/* =========================================================
+   FLOATING NAVBAR
+========================================================= */
+
+.floating-navbar {
+    position: fixed;
+
+    top: 57px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 1200px;
+    height: 72px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 42px;
+
+    background: #f8edcf;
+
+    border-radius: 50px;
+
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.4),
+        0 4px 12px rgba(0, 0, 0, 0.2);
+
+    z-index: 1000;
+}
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.navbar-logo {
+    width: 110px;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    flex-shrink: 0;
+}
+
+.navbar-logo img {
+    width: auto;
+    height: 45px;
+
+    object-fit: contain;
+
+    display: block;
+}
+
+
+/* =========================================================
+   NAVIGATION LINKS
+========================================================= */
+
+.navbar-links {
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-left: 45px;
+}
+
+.navbar-links a {
+    position: relative;
+
+    color: #000B33;
+
+    text-decoration: none;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 26px;
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    transition:
+        transform 0.25s ease,
+        opacity 0.25s ease;
+}
+
+.navbar-links a:hover {
+    transform: translateY(-2px);
+    opacity: 0.7;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1000px) {
+
+    .floating-navbar {
+        width: calc(100% - 40px);
+        height: 72px;
+
+        padding: 0 28px;
+    }
+
+    .navbar-logo {
+        width: 80px;
+    }
+
+    .navbar-logo img {
+        height: 48px;
+    }
+
+    .navbar-links {
+        margin-left: 25px;
+        gap: 25px;
+    }
+
+    .navbar-links a {
+        font-size: 22px;
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .floating-navbar {
+        top: 18px;
+
+        width: calc(100% - 24px);
+        height: 64px;
+
+        padding: 0 22px;
+
+        border-radius: 40px;
+    }
+
+    .navbar-logo {
+        width: 60px;
+    }
+
+    .navbar-logo img {
+        height: 40px;
+    }
+
+    .navbar-links {
+        margin-left: 15px;
+        gap: 18px;
+        justify-content: flex-end;
+    }
+
+    .navbar-links a {
+        font-size: 16px;
+    }
+
+    /* Hide less important links on smaller screens */
+    .navbar-links a:nth-child(2),
+    .navbar-links a:nth-child(3) {
+        display: none;
+    }
+}

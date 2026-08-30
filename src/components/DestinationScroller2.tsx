@@ -2,11 +2,11 @@ import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-import frame1 from "./assets/frame1.jpeg";
-import frame2 from "./assets/frame2.jpeg";
-import frame3 from "./assets/frame3.jpeg";
-import frame4 from "./assets/frame4.jpeg";
-import logo from "./assets/logo.png";
+import frame1 from "../assets/frame1.jpeg";
+import frame2 from "../assets/frame2.jpeg";
+import frame3 from "../assets/frame3.jpeg";
+import frame4 from "../assets/frame4.jpeg";
+import logo from "../assets/logo.png";
 
 import "./DestinationScroller.css";
 
