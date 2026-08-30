@@ -56,7 +56,7 @@ export default function DestinationHero() {
   const [spinning, setSpinning] = useState(false);
   const [spinKey, setSpinKey] = useState(0);
   const [textVisible, setTextVisible] = useState(true);
-  const timers = useRef([]);
+  const timers = useRef<any[]>([]);
   const prefersReducedMotion = useMemo(
     () =>
       typeof window !== "undefined" &&
@@ -72,7 +72,7 @@ export default function DestinationHero() {
   };
 
   const goTo = useCallback(
-    (index) => {
+    (index: number) => {
       if (spinning || index === current) return;
 
       if (prefersReducedMotion) {

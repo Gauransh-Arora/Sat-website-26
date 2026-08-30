@@ -24,7 +24,7 @@ const destinations = [
    CIRCULAR WIPE PATH
 ========================================================= */
 
-function createWedgePath(progress) {
+function createWedgePath(progress: number) {
   const cx = 50;
   const cy = 50;
   const radius = 72;
@@ -66,7 +66,7 @@ function createWedgePath(progress) {
 
 
 export default function DestinationScroller2() {
-  const sectionRef = useRef(null);
+  const sectionRef = useRef<any>(null);
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
@@ -296,35 +296,6 @@ export default function DestinationScroller2() {
       );
 
 
-      /* =====================================================
-         WIPE FUNCTION
-      ===================================================== */
-
-      const revealWipe = (element, startTime) => {
-
-        const progress = {
-          value: 0,
-        };
-
-        return gsap.to(progress, {
-          value: 1,
-
-          duration: WIPE_DURATION,
-
-          ease: "power2.inOut",
-
-          onUpdate: () => {
-            gsap.set(element, {
-              attr: {
-                d: createWedgePath(progress.value),
-              },
-            });
-          },
-
-          immediateRender: false,
-
-        });
-      };
 
 
       /* =====================================================
@@ -333,14 +304,11 @@ export default function DestinationScroller2() {
 
       const createTransition = ({
         currentInner,
-        nextInner,
-
         currentOuter,
-        nextOuter,
 
         currentBackground,
         nextBackground,
-      }) => {
+      }: any) => {
 
         const timeline = gsap.timeline();
 
@@ -564,10 +532,7 @@ export default function DestinationScroller2() {
       master.add(
         createTransition({
           currentInner: innerImages.current,
-          nextInner: innerImages.next,
-
           currentOuter: outerImages.current,
-          nextOuter: outerImages.next,
 
           currentBackground: backgrounds.current,
           nextBackground: backgrounds.next,
@@ -590,10 +555,7 @@ export default function DestinationScroller2() {
       master.add(
         createTransition({
           currentInner: innerImages.next,
-          nextInner: innerImages.third,
-
           currentOuter: outerImages.next,
-          nextOuter: outerImages.third,
 
           currentBackground: backgrounds.next,
           nextBackground: backgrounds.third,
@@ -616,10 +578,7 @@ export default function DestinationScroller2() {
       master.add(
         createTransition({
           currentInner: innerImages.third,
-          nextInner: innerImages.fourth,
-
           currentOuter: outerImages.third,
-          nextOuter: outerImages.fourth,
 
           currentBackground: backgrounds.third,
           nextBackground: backgrounds.fourth,
