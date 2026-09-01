@@ -5,6 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import peacock from "../assets/peacock.png";
 import bird from "../assets/bird.png";
 import sponsorFrameImg from "../assets/sponsor_frame.png";
+import vine from "../assets/vine.png";
 
 import "./Sponsors.css";
 
@@ -52,6 +53,23 @@ export default function Sponsors() {
         invalidateOnRefresh: true,
         anticipatePin: 1,
       });
+
+      // Hide navbar when in the sponsors section
+      const navbar = document.querySelector(".floating-navbar");
+      if (navbar) {
+        ScrollTrigger.create({
+          trigger: section,
+          start: "top top",
+          end: () => `+=${getScrollAmount()}`,
+          onToggle: (self) => {
+            if (self.isActive) {
+              gsap.to(navbar, { yPercent: -150, autoAlpha: 0, duration: 0.3, overwrite: true });
+            } else {
+              gsap.to(navbar, { yPercent: 0, autoAlpha: 1, duration: 0.3, overwrite: true });
+            }
+          }
+        });
+      }
     }, section);
 
     return () => {
@@ -89,27 +107,33 @@ export default function Sponsors() {
             </div>
           </div>
 
-          {/* CO-TITLE SPONSORS GROUP */}
-          <div className="sponsor-group co-title-group">
-            <h3 className="sponsor-heading-gothic">Co-Title Sponsors</h3>
-            <div className="co-title-grid">
-              {[...Array(4)].map((_, i) => (
-                <div key={`co-${i}`} className="frame-wrapper co-title-frame">
-                  <SponsorFrame />
-                </div>
-              ))}
+          {/* RIGHT SIDE SPONSORS (Co-Title & Power) */}
+          <div className="right-sponsors-wrapper">
+            <div className="vines-row">
+              <img src={vine} alt="Vine decoration" className="vine-decoration" />
             </div>
-          </div>
 
-          {/* POWER SPONSORS GROUP */}
-          <div className="sponsor-group power-group">
-            <h3 className="sponsor-heading-gothic">Power Sponsors</h3>
-            <div className="power-grid">
-              {[...Array(21)].map((_, i) => (
-                <div key={`power-${i}`} className="frame-wrapper power-frame">
-                  <SponsorFrame />
-                </div>
-              ))}
+            <div className="sponsor-group co-title-group">
+              <h3 className="sponsor-heading-gothic">Co-Title Sponsors</h3>
+              <div className="co-title-grid">
+                {[...Array(4)].map((_, i) => (
+                  <div key={`co-${i}`} className="frame-wrapper co-title-frame">
+                    <SponsorFrame />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* POWER SPONSORS GROUP */}
+            <div className="sponsor-group power-group">
+              <h3 className="sponsor-heading-gothic">Power Sponsors</h3>
+              <div className="power-grid">
+                {[...Array(21)].map((_, i) => (
+                  <div key={`power-${i}`} className="frame-wrapper power-frame">
+                    <SponsorFrame />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
