@@ -6,7 +6,7 @@ function App() {
 
   return (
     <>
-      <VideoLoader />
+      {/* <VideoLoader /> */}
       <Navbar />
       <DestinationScroller/>
       {/* <DestinationScroller2/> */}
