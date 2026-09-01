@@ -5,7 +5,7 @@ import cloudImg from '../assets/lib_cloud_img.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function ImageTransition() {
+export default function Footer() {
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
@@ -16,11 +16,11 @@ export default function ImageTransition() {
       gsap.fromTo(
         imageRef.current,
         {
-          scale: 1.2,
+          scale: 1.71,
           yPercent: 8,
         },
         {
-          scale: 1.2,
+          scale: 1.71,
           yPercent: -8,
           ease: 'none',
           scrollTrigger: {
@@ -56,8 +56,8 @@ export default function ImageTransition() {
         src={cloudImg}
         alt="Cloud Transition"
         style={{
+          height: '100vh',
           width: '100vw',
-          height: '100dvh',
           objectFit: 'cover',
           objectPosition: 'center',
           margin: 0,

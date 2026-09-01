@@ -10,6 +10,8 @@ import afterMovieFrame from "../assets/aftermovie_frame.png";
 import M from "../assets/M.png";
 import Navbar from "./Navbar";
 import Sponsors from "./Sponsors";
+import FAQSection from "./FAQSection";
+import Footer from "./Footer";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -635,6 +637,12 @@ export default function App() {
         <Sponsors/>
         
 
+      </section>
+      <section>
+        <FAQSection/>
+      </section>
+      <section>
+        <Footer/>
       </section>
 
 

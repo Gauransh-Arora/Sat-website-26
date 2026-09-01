@@ -5,7 +5,8 @@
   width: 100vw;
   height: 100vh;
   background-color: #EEE5C8;
-  overflow: hidden; /* Hide the horizontal track overflow */
+  overflow: hidden;
+  /* Hide the horizontal track overflow */
   position: relative;
   margin: 0;
   padding: 0;
@@ -20,8 +21,10 @@
   align-items: center;
   justify-content: flex-start;
   height: 100vh;
-  width: max-content; /* Allow it to grow based on contents */
-  will-change: transform; /* Optimize for GSAP translation */
+  width: max-content;
+  /* Allow it to grow based on contents */
+  will-change: transform;
+  /* Optimize for GSAP translation */
   padding: 0;
 }
 
@@ -125,16 +128,22 @@
   position: relative;
   display: flex;
   flex-direction: row;
-  align-items: center; /* Keep the original vertical alignment */
-  gap: 12rem; /* Keep the same gap as before */
-  padding-top: 6rem; /* Space for the absolute vines at the top */
+  align-items: center;
+  /* Keep the original vertical alignment */
+  gap: 12rem;
+  /* Keep the same gap as before */
+  padding-top: 6rem;
+  /* Space for the absolute vines at the top */
 }
 
 .vines-row {
   position: absolute;
-  top: -25%; /* Move upwards */
-  left: -40rem; /* Move further left */
-  width: max-content; /* Allow row to expand fully */
+  top: -25%;
+  /* Move upwards */
+  left: -40rem;
+  /* Move further left */
+  width: max-content;
+  /* Allow row to expand fully */
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -143,10 +152,12 @@
 }
 
 .vine-decoration {
-  width: 2400px; /* Use a fixed large pixel width to guarantee sizing */
+  width: 2400px;
+  /* Use a fixed large pixel width to guarantee sizing */
   height: auto;
   object-fit: contain;
-  object-position: left top; /* Anchor it to the top left so it grows downwards and rightwards */
+  object-position: left top;
+  /* Anchor it to the top left so it grows downwards and rightwards */
   flex-shrink: 0;
 }
 
@@ -207,8 +218,22 @@
 
 /* Responsive adjustments */
 @media (max-width: 1024px) {
-  .sponsors-content { gap: 3rem; }
-  .title-frame { width: 250px; height: 300px; }
-  .co-title-frame { width: 120px; height: 144px; }
-  .power-frame { width: 60px; height: 72px; }
+  .sponsors-content {
+    gap: 3rem;
+  }
+
+  .title-frame {
+    width: 250px;
+    height: 300px;
+  }
+
+  .co-title-frame {
+    width: 120px;
+    height: 144px;
+  }
+
+  .power-frame {
+    width: 60px;
+    height: 72px;
+  }
 }
