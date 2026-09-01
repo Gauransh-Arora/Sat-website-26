@@ -1,7 +1,6 @@
 import React, { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Lenis from "lenis";
 import "./FAQSection.css";
 import faqIcon from "../assets/faq_icon.png";
 
@@ -53,20 +52,6 @@ export default function FAQSection() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useLayoutEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      smoothWheel: true,
-      wheelMultiplier: 0.9,
-      touchMultiplier: 1.2,
-    });
-
-    function raf(time: number) {
-      lenis.raf(time * 1000);
-    }
-
-    gsap.ticker.add(raf);
-    gsap.ticker.lagSmoothing(0);
-
     const ctx = gsap.context(() => {
       gsap.utils.toArray(".faq-row").forEach((el: any) => {
         gsap.fromTo(
@@ -103,8 +88,6 @@ export default function FAQSection() {
 
     return () => {
       ctx.revert();
-      gsap.ticker.remove(raf);
-      lenis.destroy();
     };
   }, []);
 
