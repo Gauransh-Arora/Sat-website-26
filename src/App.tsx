@@ -1,6 +1,7 @@
 
 import Hero from './components/Hero.tsx'
 // import Sponsors from './components/Sponsors.tsx'
+import FAQSection from './components/FAQSection.tsx'
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
       {/* <DestinationHero/> */}
       {/* <DiscHero/> */}
       <Hero/>
+      <FAQSection/>
     </>
     
   )
