@@ -1,7 +1,6 @@
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Lenis from "lenis";
 
 import peacock from "../assets/peacock.png";
 import lotus from "../assets/lotus.png";

@@ -24,7 +24,7 @@ export default function App() {
       touchMultiplier: 1.2,
     });
 
-    function raf(time) {
+    function raf(time: number) {
       lenis.raf(time * 1000);
     }
 
@@ -480,7 +480,7 @@ export default function App() {
          GLOBAL REVEALS
       ===================================================== */
 
-      gsap.utils.toArray(".reveal-up").forEach((element) => {
+      gsap.utils.toArray<Element>(".reveal-up").forEach((element) => {
         gsap.fromTo(
           element,
           {
