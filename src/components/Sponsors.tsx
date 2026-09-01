@@ -20,28 +20,8 @@ export default function Sponsors() {
     const track = trackRef.current;
     if (!section || !track) return;
 
-    // Initialize Lenis for this specific component to ensure smooth inertial scrolling
-    // as requested by the prompt ("Use Lenis for smooth/inertial scrolling")
-    // but only if it's not already running globally. Since Hero.tsx is commented out
-    // and doesn't run globally, we start one here and clean it up.
-    let lenis: Lenis | undefined;
-    let raf: ((time: number) => void) | undefined;
-    
-    // Quick check to avoid double initialization if someone else started it globally
-    if (!(window as any).lenis) {
-      lenis = new Lenis({
-        duration: 1.2,
-        smoothWheel: true,
-        wheelMultiplier: 0.9,
-      });
-      (window as any).lenis = lenis;
+    // Lenis is handled globally by Hero.tsx, so we don't initialize it here to avoid conflicts.
 
-      raf = (time: number) => {
-        lenis?.raf(time * 1000);
-      };
-      gsap.ticker.add(raf);
-      gsap.ticker.lagSmoothing(0);
-    }
 
     const ctx = gsap.context(() => {
       const getScrollAmount = () => {
@@ -69,11 +49,8 @@ export default function Sponsors() {
 
     return () => {
       ctx.revert();
-      if (lenis) {
-        if (raf) gsap.ticker.remove(raf);
-        lenis.destroy();
-        delete (window as any).lenis;
-      }
+      // No lenis to clean up here since Hero handles it
+
     };
   }, []);
 
@@ -83,7 +60,7 @@ export default function Sponsors() {
         
         {/* PEACOCK */}
         <div className="sponsors-peacock">
-          <img src={peacock} alt="Peacock" />
+          <img src={peacock} alt="Peacock" onLoad={() => ScrollTrigger.refresh()} />
         </div>
 
         {/* CONTENT */}
@@ -123,7 +100,7 @@ export default function Sponsors() {
 
         {/* LOTUS */}
         <div className="sponsors-lotus">
-          <img src={lotus} alt="Lotus" />
+          <img src={lotus} alt="Lotus" onLoad={() => ScrollTrigger.refresh()} />
         </div>
 
       </div>

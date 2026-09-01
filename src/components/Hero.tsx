@@ -9,6 +9,7 @@ import logoImage from "../assets/logo.png";
 import afterMovieFrame from "../assets/aftermovie_frame.png";
 import M from "../assets/M.png";
 import Navbar from "./Navbar";
+import Sponsors from "./Sponsors";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -628,41 +629,11 @@ export default function App() {
           CONCEPT
       ===================================================== */}
 
-      <section className="concept-section">
+      <section className="">
 
-        <img
-          src="/images/flower-left.png"
-          alt=""
-          className="flower flower-left"
-        />
-
-        <img
-          src="/images/flower-right.png"
-          alt=""
-          className="flower flower-right"
-        />
-
-        <div className="concept-inner">
-
-          <span className="eyebrow">
-            ERA RESIDENCE
-          </span>
-
-          <h2 className="concept-title">
-            ERA RESIDENCES IS A
-            <br />
-            BOUTIQUE GATED
-            <br />
-            COMMUNITY.
-          </h2>
-
-          <p className="concept-text">
-            A limited collection of homes created
-            around a slower, more considered way
-            of living.
-          </p>
-
-        </div>
+        
+        <Sponsors/>
+        
 
       </section>
 
