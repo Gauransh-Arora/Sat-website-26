@@ -4,6 +4,11 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import "./Hero.css"
 import bgImage from "../assets/bg.png";
+import flowerImage from "../assets/flower.png";
+import logoImage from "../assets/logo.png";
+import afterMovieFrame from "../assets/aftermovie_frame.png";
+import M from "../assets/M.png";
+import Navbar from "./Navbar";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -88,7 +93,7 @@ export default function App() {
          HERO CIRCLE TRANSITION
       ===================================================== */
 
-      const circleText = document.querySelector(".circle-content");
+      const circleText = document.querySelector(".semicircle-content");
 
       gsap.fromTo(
         circleText,
@@ -108,6 +113,19 @@ export default function App() {
           },
         }
       );
+
+      const archText = document.querySelector(".arch-text") as HTMLElement | null;
+      if (archText) {
+        ScrollTrigger.create({
+          trigger: ".circle-transition",
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+          onUpdate: (self) => {
+            archText.style.wordSpacing = `${self.progress * 5}rem`;
+          }
+        });
+      }
 
 
       /* =====================================================
@@ -513,17 +531,7 @@ export default function App() {
           GLOBAL NAV
       ===================================================== */}
 
-      <header className="site-header">
-        <div className="header-logo">
-          ERA
-        </div>
-
-        <div className="header-right">
-          <span>MENU</span>
-          <span>EN</span>
-        </div>
-      </header>
-
+      <Navbar />
 
       {/* =====================================================
           HERO
@@ -531,34 +539,8 @@ export default function App() {
 
       <section className="hero">
 
-
-        <div className="hero-meta">
-          <span>01</span>
-          <span>ESTEPONA</span>
-        </div>
-
-        <nav className="hero-nav">
-          <span>A PLACE</span>
-          <span>TO RETURN TO</span>
-        </nav>
-
         <div className="hero-title">
-          <div className="hero-title-main">
-            ERA
-          </div>
-
-          <div className="hero-title-sub">
-            RESIDENCE
-          </div>
-
-          <div className="hero-location">
-            ESTEPONA
-          </div>
-        </div>
-
-        <div className="hero-scroll">
-          <span>SCROLL TO EXPLORE</span>
-          <span className="scroll-arrow">↓</span>
+          <img src={logoImage} alt="Saturnalia Logo" className="hero-center-logo" />
         </div>
 
       </section>
@@ -569,68 +551,49 @@ export default function App() {
       ===================================================== */}
 
       <section className="circle-transition">
-
         <div className="hero-circle">
+          
+          <svg className="arch-text-svg" viewBox="0 0 1000 500">
+            <path id="arch-path" d="M 80 500 A 420 420 0 0 1 920 500" fill="transparent" />
+            <text className="arch-text">
+              <textPath href="#arch-path" startOffset="50%" textAnchor="middle">
+                The Ascension of Legacy
+              </textPath>
+            </text>
+          </svg>
 
-          <div className="circle-content">
-
-            <div className="circle-small">
-              ERA RESIDENCE
+          <div className="semicircle-wrapper">
+            <div className="semicircle-top">
+              <div className="flower-text-left">51st</div>
+              <img src={flowerImage} alt="Flower icon" className="flower-icon" />
+              <div className="flower-text-right">EDITION</div>
             </div>
-
-            <h2>
-              BUILT
-              <br />
-              TO STAY
-            </h2>
-
-            <div className="circle-description">
-              A private collection of residences
-              created for living beautifully.
+            
+            <div className="semicircle-divider"></div>
+            
+            <div className="semicircle-bottom-text">
+              A Fest to Live - To<br />
+              Return Year After Year
             </div>
-
           </div>
-
         </div>
 
       </section>
 
 
       {/* =====================================================
-          BUILT TO STAY
+          MEMORIES OF YESTERYEAR
       ===================================================== */}
 
-      <section className="built-section">
-
-        <div className="built-top">
-          <span>02</span>
-          <span>THE RESIDENCE</span>
-        </div>
-
-        <div className="built-content">
-
-          <h2 className="built-title">
-            BUILT TO
-            <br />
-            STAY
-          </h2>
-
-          <div className="built-image-wrapper">
-            <img
-              src="/images/built-stay.jpg"
-              alt=""
-              className="built-image"
-            />
+      <section className="memories-section">
+        <h2 className="memories-title">MEMORIES OF YESTERYEAR</h2>
+        
+        <div className="video-container">
+          <img src={afterMovieFrame} alt="Frame" className="video-frame" />
+          <div className="iframe-wrapper">
+             <iframe width="560" height="315" src="https://www.youtube.com/embed/sYe0Ssz0M3s?si=nmK1ZAPvdfGeGXxt" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
           </div>
-
-          <p className="built-description">
-            A contemporary interpretation of Mediterranean
-            living, designed around space, light and a deep
-            connection with the landscape.
-          </p>
-
         </div>
-
       </section>
 
 
@@ -640,9 +603,15 @@ export default function App() {
 
       <section className="residence-section">
 
+        <div className="residence-intro-text">
+          <p>From Unforgettable Performances To Electric Crowds, Saturnalia 2025 Was A<br/>Celebration Like No Other.</p>
+          <br/>
+          <p>Relive The Moments. Feel The Energy.<br/>And Get Ready For What's Next.</p>
+        </div>
+
         <div className="residence-image-wrapper">
           <img
-            src="/images/residence.jpg"
+            src={M}
             alt=""
             className="residence-image"
           />
@@ -650,24 +619,7 @@ export default function App() {
 
         <div className="residence-overlay" />
 
-        <div className="residence-copy">
-
-          <span className="eyebrow">
-            THE RESIDENCES
-          </span>
-
-          <h2>
-            Designed
-            <br />
-            around living.
-          </h2>
-
-          <p>
-            Private homes surrounded by nature,
-            architecture and the Mediterranean light.
-          </p>
-
-        </div>
+        
 
       </section>
 
@@ -735,8 +687,7 @@ export default function App() {
             MILE
           </h2>
 
-          <p>
-            A privileged position on the Costa del
+          <p>  A privileged position on the Costa del
             Sol, close to the sea and everything
             Estepona has to offer.
           </p>

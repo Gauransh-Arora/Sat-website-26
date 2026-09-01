@@ -14,7 +14,7 @@ export default function Navbar() {
             <a href="#team">Team</a>
             <a href="#gallery">Gallery</a>
             <a href="#contact">Contact</a>
-            <a href="#signin">Sign in</a>
+            <a href="#signin" className="signin-btn">Sign in</a>
         </div>
     </nav>
   );
