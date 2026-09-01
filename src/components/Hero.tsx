@@ -2,6 +2,8 @@ import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
+import "./Hero.css"
+import bgImage from "../assets/bg.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -38,10 +40,8 @@ export default function App() {
         scrollTrigger: {
           trigger: hero,
           start: "top top",
-          end: "+=180%",
+          end: "+=100%",
           scrub: 1,
-          pin: true,
-          anticipatePin: 1,
         },
       });
 
@@ -88,45 +88,26 @@ export default function App() {
          HERO CIRCLE TRANSITION
       ===================================================== */
 
-      const circle = document.querySelector(".hero-circle");
       const circleText = document.querySelector(".circle-content");
 
-      gsap.set(circle, {
-        scale: 0.05,
-      });
-
-      gsap.set(circleText, {
-        opacity: 0,
-        y: 50,
-      });
-
-      const circleTL = gsap.timeline({
-        scrollTrigger: {
-          trigger: ".circle-transition",
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1,
+      gsap.fromTo(
+        circleText,
+        {
+          opacity: 0,
+          y: 50,
         },
-      });
-
-      circleTL
-        .to(
-          circle,
-          {
-            scale: 1,
-            ease: "none",
+        {
+          opacity: 1,
+          y: 0,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: ".circle-transition",
+            start: "top 75%",
+            end: "top 35%",
+            scrub: true,
           },
-          0
-        )
-        .to(
-          circleText,
-          {
-            opacity: 1,
-            y: 0,
-            ease: "power2.out",
-          },
-          0.3
-        );
+        }
+      );
 
 
       /* =====================================================
@@ -520,6 +501,14 @@ export default function App() {
   return (
     <main ref={appRef}>
 
+      <div className="fixed-bg">
+        <img
+          src={bgImage}
+          alt=""
+          className="hero-image"
+        />
+      </div>
+
       {/* =====================================================
           GLOBAL NAV
       ===================================================== */}
@@ -542,15 +531,6 @@ export default function App() {
 
       <section className="hero">
 
-        <div className="hero-background">
-          <img
-            src="/images/hero.jpg"
-            alt=""
-            className="hero-image"
-          />
-        </div>
-
-        <div className="hero-overlay" />
 
         <div className="hero-meta">
           <span>01</span>

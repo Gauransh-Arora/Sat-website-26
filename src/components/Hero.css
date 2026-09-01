@@ -1,0 +1,1086 @@
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    width: 100%;
+}
+
+body {
+    width: 100%;
+    overflow-x: hidden;
+
+    color: #181818;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+img {
+    display: block;
+    width: 100%;
+}
+
+button,
+a {
+    font: inherit;
+}
+
+::selection {
+    background: #181818;
+    color: #f1eee7;
+}
+
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+main {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+section {
+    position: relative;
+    width: 100%;
+}
+
+.eyebrow {
+    display: block;
+
+    font-size: 10px;
+    line-height: 1;
+
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.site-header {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 80px;
+
+    padding: 0 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    z-index: 100;
+
+    color: white;
+
+    mix-blend-mode: difference;
+
+    pointer-events: none;
+}
+
+.header-logo {
+    font-size: 19px;
+    letter-spacing: 0.04em;
+}
+
+.header-right {
+    display: flex;
+    gap: 25px;
+
+    font-size: 10px;
+    letter-spacing: 0.14em;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+    height: 100vh;
+    min-height: 700px;
+
+    overflow: hidden;
+
+    color: white;
+
+    isolation: isolate;
+}
+
+.fixed-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -10;
+    overflow: hidden;
+}
+
+.hero-image {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    transform: scale(1.03);
+
+    will-change: transform;
+}
+
+
+
+.hero-title {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: 100%;
+
+    text-align: center;
+
+    line-height: 0.84;
+
+    will-change: transform, opacity;
+}
+
+.hero-title-main {
+    font-size: clamp(110px, 18vw, 300px);
+
+    letter-spacing: -0.065em;
+}
+
+.hero-title-sub {
+    margin-top: 18px;
+
+    font-size: clamp(20px, 2.3vw, 38px);
+
+    letter-spacing: 0.22em;
+}
+
+.hero-location {
+    margin-top: 18px;
+
+    font-size: 9px;
+
+    letter-spacing: 0.24em;
+}
+
+.hero-meta {
+    position: absolute;
+
+    left: 38px;
+    bottom: 44px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 9px;
+
+    font-size: 9px;
+
+    letter-spacing: 0.16em;
+
+    will-change: transform, opacity;
+}
+
+.hero-nav {
+    position: absolute;
+
+    right: 38px;
+    bottom: 44px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: flex-end;
+
+    gap: 5px;
+
+    font-size: 9px;
+
+    letter-spacing: 0.17em;
+
+    will-change: transform, opacity;
+}
+
+.hero-scroll {
+    position: absolute;
+
+    left: 50%;
+    bottom: 35px;
+
+    transform: translateX(-50%);
+
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    font-size: 8px;
+
+    letter-spacing: 0.15em;
+
+    opacity: 0.85;
+}
+
+.scroll-arrow {
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   CIRCLE TRANSITION
+========================================================= */
+
+.circle-transition {
+    width: 100%;
+    background: transparent;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    padding-top: 15vh;
+}
+
+.hero-circle {
+    width: 100vw;
+    height: 50vw;
+
+    min-width: 900px;
+    min-height: 450px;
+
+    border-radius: max(450px, 50vw) max(450px, 50vw) 0 0;
+
+    background: #EEE5C8;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.circle-content {
+    width: 600px;
+    max-width: 80vw;
+
+    text-align: center;
+
+    color: #151515;
+
+    will-change: transform, opacity;
+}
+
+.circle-small {
+    margin-bottom: 28px;
+
+    font-size: 9px;
+
+    letter-spacing: 0.2em;
+}
+
+.circle-content h2 {
+    font-size: clamp(70px, 11vw, 170px);
+
+    line-height: 0.78;
+
+    letter-spacing: -0.055em;
+
+    font-weight: 400;
+}
+
+.circle-description {
+    width: 280px;
+
+    margin: 45px auto 0;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   BUILT SECTION
+========================================================= */
+
+.built-section {
+    min-height: 120vh;
+
+    padding: 120px 6vw 140px;
+
+    background: #EEE5C8;
+
+    overflow: hidden;
+}
+
+.built-top {
+    display: flex;
+    justify-content: space-between;
+
+    font-size: 9px;
+
+    letter-spacing: 0.16em;
+}
+
+.built-content {
+    min-height: 95vh;
+
+    display: grid;
+
+    grid-template-columns:
+        1fr minmax(250px, 420px) 1fr;
+
+    align-items: center;
+
+    gap: 60px;
+}
+
+.built-title {
+    font-size: clamp(80px, 11vw, 180px);
+
+    line-height: 0.78;
+
+    letter-spacing: -0.06em;
+
+    font-weight: 400;
+
+    will-change: transform, opacity;
+}
+
+.built-image-wrapper {
+    width: 100%;
+    aspect-ratio: 0.72;
+
+    overflow: hidden;
+}
+
+.built-image {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    will-change: transform, opacity;
+}
+
+.built-description {
+    max-width: 270px;
+
+    justify-self: end;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   RESIDENCE IMAGE
+========================================================= */
+
+.residence-section {
+    height: 110vh;
+
+    min-height: 700px;
+
+    overflow: hidden;
+
+    color: white;
+
+    isolation: isolate;
+}
+
+.residence-image-wrapper {
+    position: absolute;
+
+    inset: 0;
+
+    overflow: hidden;
+
+    z-index: -2;
+}
+
+.residence-image {
+    width: 100%;
+    height: 115%;
+
+    object-fit: cover;
+
+    will-change: transform;
+}
+
+.residence-overlay {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: -1;
+
+    background:
+        linear-gradient(to bottom,
+            transparent 35%,
+            rgba(0, 0, 0, 0.48));
+}
+
+.residence-copy {
+    position: absolute;
+
+    left: 7vw;
+    bottom: 11vh;
+
+    max-width: 470px;
+
+    will-change: transform, opacity;
+}
+
+.residence-copy .eyebrow {
+    margin-bottom: 25px;
+}
+
+.residence-copy h2 {
+    font-size: clamp(55px, 7vw, 110px);
+
+    line-height: 0.86;
+
+    letter-spacing: -0.055em;
+
+    font-weight: 400;
+}
+
+.residence-copy p {
+    max-width: 300px;
+
+    margin-top: 35px;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   CONCEPT SECTION
+========================================================= */
+
+.concept-section {
+    min-height: 120vh;
+
+    padding: 180px 8vw;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #f1eee7;
+
+    overflow: hidden;
+}
+
+.concept-inner {
+    position: relative;
+
+    width: 100%;
+
+    max-width: 1050px;
+
+    text-align: center;
+
+    z-index: 2;
+}
+
+.concept-inner .eyebrow {
+    margin-bottom: 50px;
+}
+
+.concept-title {
+    font-size: clamp(52px, 7vw, 115px);
+
+    line-height: 0.92;
+
+    letter-spacing: -0.055em;
+
+    font-weight: 400;
+
+    will-change: transform, opacity;
+}
+
+.concept-text {
+    max-width: 350px;
+
+    margin: 60px auto 0;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+    will-change: transform, opacity;
+}
+
+
+/* =========================================================
+   FLOWERS
+========================================================= */
+
+.flower {
+    position: absolute;
+
+    width: min(25vw, 400px);
+
+    pointer-events: none;
+
+    z-index: 1;
+
+    will-change: transform;
+}
+
+.flower-left {
+    left: -40px;
+    top: -20px;
+}
+
+.flower-right {
+    right: -40px;
+    bottom: -30px;
+}
+
+.flower-coast-left {
+    left: -80px;
+    top: 0;
+}
+
+.flower-coast-right {
+    right: -60px;
+    bottom: -20px;
+}
+
+
+/* =========================================================
+   GOLDEN MILE
+========================================================= */
+
+.golden-mile-section {
+    height: 100vh;
+
+    min-height: 700px;
+
+    overflow: hidden;
+
+    background: #e6dfd2;
+}
+
+.golden-copy {
+    position: absolute;
+
+    left: 8vw;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 35%;
+
+    z-index: 2;
+}
+
+.golden-copy .eyebrow {
+    margin-bottom: 35px;
+}
+
+.golden-title {
+    font-size: clamp(80px, 10vw, 165px);
+
+    line-height: 0.78;
+
+    letter-spacing: -0.06em;
+
+    font-weight: 400;
+
+    will-change: transform, opacity;
+}
+
+.golden-copy p {
+    width: 270px;
+
+    margin-top: 40px;
+
+    font-size: 12px;
+
+    line-height: 1.55;
+}
+
+.golden-image-wrapper {
+    position: absolute;
+
+    top: 0;
+    right: 0;
+
+    width: 57%;
+
+    height: 100%;
+
+    overflow: hidden;
+}
+
+.golden-image {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    will-change: transform;
+}
+
+
+/* =========================================================
+   COAST
+========================================================= */
+
+.coast-section {
+    min-height: 120vh;
+
+    padding: 170px 8vw;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #f1eee7;
+
+    overflow: hidden;
+}
+
+.coast-inner {
+    width: 100%;
+    max-width: 1000px;
+
+    text-align: center;
+
+    z-index: 2;
+}
+
+.coast-inner .eyebrow {
+    margin-bottom: 50px;
+}
+
+.coast-title {
+    font-size: clamp(70px, 9vw, 150px);
+
+    line-height: 0.8;
+
+    letter-spacing: -0.06em;
+
+    font-weight: 400;
+
+    will-change: transform, opacity;
+}
+
+.coast-text {
+    max-width: 340px;
+
+    margin: 55px auto 0;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+    will-change: transform, opacity;
+}
+
+.coast-line {
+    width: 100%;
+
+    height: 1px;
+
+    margin-top: 110px;
+
+    background: #1b1b1b;
+
+    transform-origin: left;
+
+    will-change: transform;
+}
+
+.coast-bottom {
+    margin-top: 18px;
+
+    display: flex;
+    justify-content: space-between;
+
+    font-size: 8px;
+
+    letter-spacing: 0.15em;
+}
+
+
+/* =========================================================
+   AERIAL
+========================================================= */
+
+.aerial-section {
+    height: 110vh;
+
+    min-height: 700px;
+
+    overflow: hidden;
+
+    color: white;
+
+    isolation: isolate;
+}
+
+.aerial-image-wrapper {
+    position: absolute;
+
+    inset: 0;
+
+    overflow: hidden;
+
+    z-index: -2;
+}
+
+.aerial-image {
+    width: 100%;
+    height: 115%;
+
+    object-fit: cover;
+
+    will-change: transform;
+}
+
+.aerial-overlay {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: -1;
+
+    background:
+        linear-gradient(to bottom,
+            rgba(0, 0, 0, 0.12),
+            transparent 40%,
+            rgba(0, 0, 0, 0.38));
+}
+
+.aerial-content {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: 90%;
+
+    text-align: center;
+}
+
+.aerial-content .eyebrow {
+    margin-bottom: 30px;
+}
+
+.aerial-content h2 {
+    font-size: clamp(70px, 10vw, 170px);
+
+    line-height: 0.8;
+
+    letter-spacing: -0.06em;
+
+    font-weight: 400;
+}
+
+.aerial-bottom {
+    position: absolute;
+
+    left: 38px;
+    right: 38px;
+    bottom: 38px;
+
+    display: flex;
+    justify-content: space-between;
+
+    font-size: 8px;
+
+    letter-spacing: 0.15em;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer {
+    min-height: 60vh;
+
+    padding: 80px 38px 40px;
+
+    background: #171717;
+
+    color: #f1eee7;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.footer-logo {
+    font-size: clamp(100px, 20vw, 300px);
+
+    line-height: 0.7;
+
+    letter-spacing: -0.07em;
+}
+
+.footer-links {
+    display: flex;
+
+    gap: 35px;
+
+    font-size: 9px;
+
+    letter-spacing: 0.15em;
+}
+
+.footer-bottom {
+    font-size: 8px;
+
+    letter-spacing: 0.13em;
+
+    opacity: 0.6;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .site-header {
+        height: 65px;
+        padding: 0 20px;
+    }
+
+    .header-right {
+        gap: 15px;
+    }
+
+    .hero-meta {
+        left: 20px;
+        bottom: 25px;
+    }
+
+    .hero-nav {
+        right: 20px;
+        bottom: 25px;
+    }
+
+    .hero-title-main {
+        font-size: 27vw;
+    }
+
+    .hero-title-sub {
+        font-size: 5vw;
+    }
+
+    .hero-circle {
+        min-width: 700px;
+        min-height: 700px;
+    }
+
+    .built-section {
+        padding: 90px 25px;
+    }
+
+    .built-content {
+        grid-template-columns: 1fr;
+
+        gap: 50px;
+
+        padding-top: 80px;
+    }
+
+    .built-title {
+        font-size: 23vw;
+    }
+
+    .built-image-wrapper {
+        width: 65%;
+        margin: auto;
+    }
+
+    .built-description {
+        justify-self: start;
+        max-width: 320px;
+    }
+
+    .residence-copy {
+        left: 25px;
+        right: 25px;
+        bottom: 50px;
+    }
+
+    .concept-section {
+        padding: 130px 25px;
+    }
+
+    .concept-title {
+        font-size: 13vw;
+    }
+
+    .flower {
+        width: 35vw;
+    }
+
+    .golden-mile-section {
+        height: 110vh;
+    }
+
+    .golden-copy {
+        left: 25px;
+        top: 20%;
+        transform: none;
+
+        width: 60%;
+    }
+
+    .golden-title {
+        font-size: 18vw;
+    }
+
+    .golden-image-wrapper {
+        width: 70%;
+        height: 65%;
+
+        top: auto;
+        bottom: 0;
+    }
+
+    .coast-section {
+        padding: 130px 25px;
+    }
+
+    .coast-title {
+        font-size: 16vw;
+    }
+
+    .coast-line {
+        margin-top: 80px;
+    }
+
+    .coast-bottom {
+        font-size: 7px;
+    }
+
+    .aerial-content h2 {
+        font-size: 17vw;
+    }
+
+    .aerial-bottom {
+        left: 20px;
+        right: 20px;
+        bottom: 25px;
+    }
+
+    .footer {
+        padding: 70px 20px 30px;
+    }
+
+    .footer-links {
+        flex-wrap: wrap;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .hero {
+        min-height: 600px;
+    }
+
+    .hero-scroll {
+        display: none;
+    }
+
+    .hero-circle {
+        width: 160vw;
+        height: 160vw;
+
+        min-width: 0;
+        min-height: 0;
+    }
+
+    .circle-content h2 {
+        font-size: 20vw;
+    }
+
+    .circle-description {
+        font-size: 11px;
+    }
+
+    .built-image-wrapper {
+        width: 80%;
+    }
+
+    .built-title {
+        font-size: 24vw;
+    }
+
+    .residence-section {
+        height: 100vh;
+    }
+
+    .residence-copy h2 {
+        font-size: 16vw;
+    }
+
+    .concept-section {
+        min-height: 100vh;
+    }
+
+    .concept-title {
+        font-size: 13vw;
+    }
+
+    .golden-copy {
+        width: 80%;
+    }
+
+    .golden-image-wrapper {
+        width: 82%;
+        height: 55%;
+    }
+
+    .golden-title {
+        font-size: 20vw;
+    }
+
+    .coast-title {
+        font-size: 18vw;
+    }
+
+    .coast-bottom span:nth-child(2) {
+        display: none;
+    }
+
+    .footer-logo {
+        font-size: 35vw;
+    }
+}
