@@ -1,6 +1,5 @@
 import DestinationScroller from './components/DestinationScroller.tsx'
 import Navbar from './components/Navbar.tsx'
-import VideoLoader from './components/VideoLoader.tsx'
 
 function App() {
 
