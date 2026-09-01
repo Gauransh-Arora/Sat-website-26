@@ -4,7 +4,7 @@
 .sponsors-section {
   width: 100vw;
   height: 100vh;
-  background-color: #C3533A;
+  background-color: #EEE5C8;
   overflow: hidden; /* Hide the horizontal track overflow */
   position: relative;
   margin: 0;
@@ -42,13 +42,14 @@
   display: block;
 }
 
-/* Lotus Image Container */
+/* Lotus (Peacock) Image Container */
 .sponsors-lotus {
   height: 100vh;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   padding-left: 4rem;
+  padding-right: 12rem;
 }
 
 .sponsors-lotus img {
@@ -64,115 +65,120 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 4rem;
+  gap: 12rem;
   padding: 0 4rem;
 }
 
-/* Title Area */
-.sponsors-title-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-right: 4rem;
-}
-
-.sponsors-title-bg {
-  font-family: "Great Vibes", "Playball", cursive, serif;
-  font-size: 8rem;
-  font-weight: 400;
-  color: white;
-  margin: 0;
-  white-space: nowrap;
-  line-height: 1;
-}
-
-.sponsors-title-fg {
-  font-family: "Playfair Display", "Times New Roman", serif;
+/* Common Text Styles */
+.sponsor-heading-gothic {
+  font-family: 'Amiri', 'Playfair Display', serif;
   font-size: 3rem;
-  font-weight: 800;
+  font-weight: bold;
   color: #223B57;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  margin: 0;
-  letter-spacing: 0.1em;
+  margin: 0 0 1rem 0;
+  text-align: center;
 }
 
-/* Marquee / Brands Area */
-.sponsors-marquee-area {
+.sponsor-heading-cursive {
+  font-family: "Great Vibes", "Playball", cursive, serif;
+  font-size: 4rem;
+  color: #34769F;
+  margin: 0;
+  text-align: center;
+}
+
+/* Title Sponsor Group */
+.title-sponsor-group {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2rem;
 }
 
-/* Symbol Rows */
-.sponsors-row {
+.sponsor-intro-texts {
   display: flex;
-  flex-direction: row;
-  gap: 3rem;
+  flex-direction: column;
   align-items: center;
 }
 
-.sponsor-symbol-wrapper {
-  position: relative;
-  width: 100px;
-  height: 100px;
+.title-sponsor-layout {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 1.5rem;
+}
+
+.title-sponsor-vertical-text {
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+  font-family: 'Amiri', 'Playfair Display', serif;
+  font-size: 1.5rem;
+  color: #223B57;
+  font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.design-symbol {
+/* Co-Title Sponsors Group */
+.co-title-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.co-title-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+/* Power Sponsors Group */
+.power-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.power-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1rem;
+}
+
+/* Frames */
+.frame-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sponsor-frame {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  position: relative;
-  z-index: 2;
-  filter: brightness(0) invert(1); /* Ensure it's white if it wasn't already */
 }
 
-.sponsor-circle {
-  position: absolute;
-  width: 46%;
-  height: 46%;
-  background-color: #E6A123; /* Golden yellow */
-  border-radius: 50%;
-  z-index: 1;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.title-frame {
+  width: 350px;
+  height: 420px;
 }
 
-/* Subtitle */
-.sponsors-subtitle {
-  font-family: "Playfair Display", "Times New Roman", serif;
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: #223B57;
-  letter-spacing: 0.05em;
-  margin: 0;
-  text-align: center;
-  text-transform: uppercase;
+.co-title-frame {
+  width: 150px;
+  height: 180px;
+}
+
+.power-frame {
+  width: 110px;
+  height: 132px;
 }
 
 /* Responsive adjustments */
 @media (max-width: 1024px) {
-  .sponsors-title-bg { font-size: 6rem; }
-  .sponsors-title-fg { font-size: 2rem; }
-  .sponsors-subtitle { font-size: 1.25rem; }
-  .sponsor-symbol-wrapper { width: 80px; height: 80px; }
-  .sponsors-content { gap: 2rem; padding: 0 2rem; }
-}
-
-@media (max-width: 768px) {
-  .sponsors-title-bg { font-size: 4rem; }
-  .sponsors-title-fg { font-size: 1.5rem; }
-  .sponsors-subtitle { font-size: 1rem; }
-  .sponsor-symbol-wrapper { width: 60px; height: 60px; }
-  .sponsors-row { gap: 1.5rem; }
-  .sponsors-content { flex-direction: column; justify-content: center; gap: 4rem; }
-  .sponsors-title-container { padding-right: 0; }
+  .sponsors-content { gap: 3rem; }
+  .title-frame { width: 250px; height: 300px; }
+  .co-title-frame { width: 120px; height: 144px; }
+  .power-frame { width: 60px; height: 72px; }
 }
