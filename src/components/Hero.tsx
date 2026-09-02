@@ -706,19 +706,9 @@ export default function App() {
           CONCEPT
       ===================================================== */}
 
-      <section className="">
-
-        
-        <Sponsors/>
-        
-
-      </section>
-      <section>
-        <FAQSection/>
-      </section>
-      <section>
-        <Footer/>
-      </section>
+      <Sponsors/>
+      <FAQSection/>
+      <Footer/>
 
 
 

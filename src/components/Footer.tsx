@@ -41,8 +41,8 @@ export default function Footer() {
       ref={containerRef}
       className="image-transition"
       style={{
-        width: '100vw',
-        height: '100dvh',
+        width: '100%',
+        height: '100vh',
         overflow: 'hidden',
         margin: 0,
         padding: 0,
@@ -57,7 +57,7 @@ export default function Footer() {
         alt="Cloud Transition"
         style={{
           height: '100vh',
-          width: '100vw',
+          width: '100%',
           objectFit: 'cover',
           objectPosition: 'center',
           margin: 0,
