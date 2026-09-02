@@ -1,0 +1,239 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;700;800&display=swap');
+
+/* Sponsors Section Container */
+.sponsors-section {
+  width: 100vw;
+  height: 100vh;
+  background-color: #EEE5C8;
+  overflow: hidden;
+  /* Hide the horizontal track overflow */
+  position: relative;
+  margin: 0;
+  padding: 0;
+  /* Prevent horizontal scrollbar during pinning */
+  max-width: 100%;
+}
+
+/* Horizontal Track */
+.sponsors-track {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100vh;
+  width: max-content;
+  /* Allow it to grow based on contents */
+  will-change: transform;
+  /* Optimize for GSAP translation */
+  padding: 0;
+}
+
+/* Peacock Image Container */
+.sponsors-peacock {
+  height: 100vh;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding-right: 4rem;
+}
+
+.sponsors-peacock img {
+  height: 100%;
+  width: auto;
+  object-fit: cover;
+  object-position: left center;
+  display: block;
+}
+
+/* Lotus (Peacock) Image Container */
+.sponsors-lotus {
+  height: 100vh;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding-left: 4rem;
+  padding-right: 12rem;
+}
+
+.sponsors-lotus img {
+  height: 100%;
+  width: auto;
+  object-fit: cover;
+  object-position: right center;
+  display: block;
+}
+
+/* Center Content */
+.sponsors-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12rem;
+  padding: 0 4rem;
+}
+
+/* Common Text Styles */
+.sponsor-heading-gothic {
+  font-family: 'Amiri', 'Playfair Display', serif;
+  font-size: 3rem;
+  font-weight: bold;
+  color: #223B57;
+  margin: 0 0 1rem 0;
+  text-align: center;
+}
+
+.sponsor-heading-cursive {
+  font-family: "Great Vibes", "Playball", cursive, serif;
+  font-size: 4rem;
+  color: #34769F;
+  margin: 0;
+  text-align: center;
+}
+
+/* Title Sponsor Group */
+.title-sponsor-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.sponsor-intro-texts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title-sponsor-layout {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 1.5rem;
+}
+
+.title-sponsor-vertical-text {
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+  font-family: 'Amiri', 'Playfair Display', serif;
+  font-size: 1.5rem;
+  color: #223B57;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Right Side Wrapper (Co-Title & Power) */
+.right-sponsors-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* Keep the original vertical alignment */
+  gap: 12rem;
+  /* Keep the same gap as before */
+  padding-top: 6rem;
+  /* Space for the absolute vines at the top */
+}
+
+.vines-row {
+  position: absolute;
+  top: -25%;
+  /* Move upwards */
+  left: -40rem;
+  /* Move further left */
+  width: max-content;
+  /* Allow row to expand fully */
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.vine-decoration {
+  width: 2400px;
+  /* Use a fixed large pixel width to guarantee sizing */
+  height: auto;
+  object-fit: contain;
+  object-position: left top;
+  /* Anchor it to the top left so it grows downwards and rightwards */
+  flex-shrink: 0;
+}
+
+/* Co-Title Sponsors Group */
+.co-title-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.co-title-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+/* Power Sponsors Group */
+.power-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.power-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1rem;
+}
+
+/* Frames */
+.frame-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sponsor-frame {
+  width: 100%;
+  height: 100%;
+}
+
+.title-frame {
+  width: 350px;
+  height: 420px;
+}
+
+.co-title-frame {
+  width: 150px;
+  height: 180px;
+}
+
+.power-frame {
+  width: 110px;
+  height: 132px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .sponsors-content {
+    gap: 3rem;
+  }
+
+  .title-frame {
+    width: 250px;
+    height: 300px;
+  }
+
+  .co-title-frame {
+    width: 120px;
+    height: 144px;
+  }
+
+  .power-frame {
+    width: 60px;
+    height: 72px;
+  }
+}

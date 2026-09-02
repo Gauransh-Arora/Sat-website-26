@@ -1,0 +1,132 @@
+@font-face {
+  font-family: 'Ambroise Francois Regular';
+  src: url('../assets/fonts/Ambroise Francois Regular.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Sloop ScriptThree Regular';
+  src: url('../assets/fonts/Sloop ScriptThree Regular.ttf') format('truetype');
+}
+
+.faq-section {
+  background: linear-gradient(180deg, #EEE5C8 0%, #9C6A5D 100%);
+  min-height: 100vh;
+  padding: 100px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #223C57;
+  overflow-x: hidden;
+}
+
+.faq-header {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.faq-subtitle {
+  font-family: 'Ambroise Francois Regular', serif;
+  font-size: 24px;
+  font-weight: normal;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+
+.faq-maintitle {
+  font-family: 'Sloop ScriptThree Regular', cursive;
+  font-size: 64px;
+  font-weight: normal;
+}
+
+.faq-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.faq-row {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  margin: 15px 0;
+}
+
+.faq-line,
+.faq-spacer {
+  flex: 1;
+}
+
+.faq-line {
+  height: 2px;
+  background-color: #223C57;
+}
+
+.faq-center-content {
+  display: flex;
+  align-items: center;
+  width: 650px;
+  max-width: 90vw;
+}
+
+.faq-icon {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.faq-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.faq-text-left {
+  padding-left: 20px;
+  text-align: left;
+}
+
+.faq-text-right {
+  padding-right: 20px;
+  text-align: right;
+}
+
+.faq-question-title {
+  font-family: 'Ambroise Francois Regular', serif;
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.faq-text-left .faq-question-title {
+  justify-content: flex-start;
+}
+
+.faq-text-right .faq-question-title {
+  justify-content: flex-end;
+}
+
+.faq-dot {
+  font-size: 16px;
+}
+
+.faq-answer {
+  font-family: 'Sloop ScriptThree Regular', cursive;
+  font-size: 26px;
+  line-height: 1.2;
+}
+
+@media (max-width: 768px) {
+  .faq-center-content {
+    width: 90vw;
+  }
+
+  .faq-maintitle {
+    font-size: 42px;
+  }
+}
