@@ -1,9 +1,10 @@
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import "./Hero.css"
 import bgImage from "../assets/bg.png";
+import satwallVideo from "../assets/SATwall.webm";
 import flowerImage from "../assets/flower.png";
 import logoImage from "../assets/logo.png";
 import afterMovieFrame from "../assets/aftermovie_frame.png";
@@ -17,6 +18,10 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function App() {
   const appRef = useRef(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const lenisRef = useRef<Lenis | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [hasEnded, setHasEnded] = useState(false);
 
   useLayoutEffect(() => {
     const lenis = new Lenis({
@@ -25,6 +30,8 @@ export default function App() {
       wheelMultiplier: 0.9,
       touchMultiplier: 1.2,
     });
+
+    lenisRef.current = lenis;
 
     function raf(time: number) {
       lenis.raf(time * 1000);
@@ -516,17 +523,64 @@ export default function App() {
 
       gsap.ticker.remove(raf);
       lenis.destroy();
+      lenisRef.current = null;
     };
   }, []);
+
+  const handleBeginClick = () => {
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setIsPlaying(true);
+          })
+          .catch((err) => {
+            console.warn("Video playback was prevented:", err);
+          });
+      }
+    }
+  };
+
+  const handleVideoPlay = () => {
+    setIsPlaying(true);
+  };
+
+  const handleVideoEnded = () => {
+    setHasEnded(true);
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.pause();
+      videoRef.current.load();
+    }
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(".circle-transition", {
+        duration: 2.0,
+        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      });
+    } else {
+      const nextSection = document.querySelector(".circle-transition");
+      if (nextSection) {
+        nextSection.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
 
   return (
     <main ref={appRef}>
 
       <div className="fixed-bg">
-        <img
-          src={bgImage}
-          alt=""
-          className="hero-image"
+        <video
+          ref={videoRef}
+          src={satwallVideo}
+          poster={bgImage}
+          className="hero-image hero-video"
+          playsInline
+          preload="auto"
+          onPlay={handleVideoPlay}
+          onEnded={handleVideoEnded}
+          aria-hidden="true"
         />
       </div>
 
@@ -543,8 +597,29 @@ export default function App() {
       <section className="hero">
 
         <div className="hero-title">
-          <img src={logoImage} alt="Saturnalia Logo" className="hero-center-logo" />
+          <img
+            src={logoImage}
+            alt="Saturnalia Logo"
+            className={`hero-center-logo ${isPlaying ? "fade-out" : ""}`}
+          />
         </div>
+
+        {!hasEnded && (
+          <div className={`hero-begin-wrapper ${isPlaying ? "fade-out" : ""}`}>
+            <button
+              className="hero-begin-btn"
+              onClick={handleBeginClick}
+              aria-label="Begin video experience"
+            >
+              <span className="btn-text">BEGIN</span>
+              <span className="btn-icon" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5,3 19,12 5,21" />
+                </svg>
+              </span>
+            </button>
+          </div>
+        )}
 
       </section>
 

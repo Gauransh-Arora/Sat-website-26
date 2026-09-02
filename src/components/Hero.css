@@ -134,12 +134,91 @@ section {
     overflow: hidden;
 }
 
-.hero-image {
+.hero-image,
+.hero-video {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transform: scale(1.03);
     will-change: transform;
+}
+
+/* =========================================================
+   BEGIN BUTTON
+========================================================= */
+
+.hero-begin-wrapper {
+    position: absolute;
+    bottom: 12vh;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+
+.hero-begin-wrapper.fade-out {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+    pointer-events: none;
+}
+
+.hero-begin-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 36px;
+    border-radius: 9999px;
+    background: rgba(18, 28, 42, 0.45);
+    border: 1px solid rgba(238, 229, 200, 0.4);
+    color: #EEE5C8;
+    font-family: 'Amiri', serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    cursor: pointer;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    outline: none;
+}
+
+.hero-begin-btn:hover {
+    background: rgba(34, 59, 87, 0.75);
+    border-color: rgba(238, 229, 200, 0.85);
+    color: #FFFFFF;
+    transform: scale(1.04);
+    box-shadow: 0 12px 40px 0 rgba(34, 59, 87, 0.4);
+}
+
+.hero-begin-btn:hover .btn-icon {
+    transform: translateX(3px);
+}
+
+.hero-begin-btn:focus-visible {
+    outline: 2px solid #EEE5C8;
+    outline-offset: 4px;
+}
+
+.hero-begin-btn .btn-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .hero-begin-wrapper {
+        bottom: 8vh;
+    }
+
+    .hero-begin-btn {
+        padding: 12px 28px;
+        font-size: 13px;
+        letter-spacing: 0.2em;
+    }
 }
 
 .hero-title {
@@ -156,6 +235,14 @@ section {
     /* max-width: 700px; */
     height: auto;
     object-fit: contain;
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+
+.hero-center-logo.fade-out {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.96);
+    pointer-events: none;
 }
 
 .hero-title-main {
